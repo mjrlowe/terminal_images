@@ -1,9 +1,7 @@
 import { decodeJpeg } from "./deps.ts";
 
-console.log(Deno.stdout)
-
 const image_file_path = "./test_images/old_man.jpg";
-const character_map = ["█", "▓", "▒", "░", " "]; //["#", "/", ".", " "];
+const character_map = "█▓▒░ "; //"#/. ";
 
 const inverted = true;
 
@@ -31,6 +29,5 @@ for (let y = 0; y < pixelHeight; y += pixelWidth / (columns-1)*2) {
   }
   outputString += "\n";
 }
-
 
 console.log(outputString);
