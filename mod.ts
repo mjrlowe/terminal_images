@@ -1,9 +1,9 @@
 import { decodeJpeg } from "./deps.ts";
 
 const image_file_path = "./test_images/old_man.jpg";
-const character_map = "█▓▒░ "; //"#/. ";
+const character_map = "█▓▒░ "; //"#@%M+:,. "
 
-const inverted = true;
+const inverted = false;
 
 async function getImageString(image_file_path: string): Promise<string> {
   const raw = await Deno.readFile(image_file_path);
@@ -15,7 +15,7 @@ async function getImageString(image_file_path: string): Promise<string> {
   const pixelWidth = decodedImage.width;
   const pixelHeight = decodedImage.height;
 
-  const resolution = (columns < rows*2) ? pixelWidth / (columns - 1) : pixelHeight / (rows - 1)/2;
+  const resolution = (columns < rows*2) ? pixelWidth / columns : pixelHeight / (rows - 2)/2;
 
   let outputString = "";
   for (let y = 0; y < pixelHeight; y += resolution * 2) {
