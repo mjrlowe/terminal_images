@@ -5,7 +5,7 @@ const character_map = "█▓▒░ "; //"#/. ";
 
 const inverted = true;
 
-function getImageString(image_file_path): string {
+async function getImageString(image_file_path: string): Promise<string> {
   const raw = await Deno.readFile(image_file_path);
 
   const decodedImage = decodeJpeg(raw);
@@ -15,9 +15,11 @@ function getImageString(image_file_path): string {
   const pixelWidth = decodedImage.width;
   const pixelHeight = decodedImage.height;
 
+  const resolution = (columns < rows*2) ? pixelWidth / (columns - 1) : pixelHeight / (rows - 1)/2;
+
   let outputString = "";
-  for (let y = 0; y < pixelHeight; y += pixelWidth / (columns - 1) * 2) {
-    for (let x = 0; x < pixelWidth; x += pixelWidth / (columns - 1)) {
+  for (let y = 0; y < pixelHeight; y += resolution * 2) {
+    for (let x = 0; x < pixelWidth; x += resolution) {
       const pixel = decodedImage.getPixel(Math.floor(x), Math.floor(y));
       const grayscaleValue = (pixel.r + pixel.g + pixel.b) / 3;
       let characterIndex = Math.floor(
@@ -34,8 +36,8 @@ function getImageString(image_file_path): string {
   return outputString;
 }
 
-function printImageString():void{
-  console.log(printImageString);
+async function printImageString(image_file_path: string):Promise<void>{
+  console.log(await getImageString(image_file_path));
 }
 
 export {getImageString, printImageString}
