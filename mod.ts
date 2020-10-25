@@ -8,6 +8,8 @@ interface imageSettings {
   color?: boolean;
 }
 
+const MIN_AUTO_WIDTH = 12;
+
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
   const characterMap = settings.characterMap ?? "█▓▒░ ";
@@ -24,23 +26,25 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   const decodedImage = decodeImage(raw, fileExtension);
 
-  const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+  console.log(Deno.consoleSize(Deno.stdout.rid));
+  const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
+  const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
 
-  const pixelWidth = decodedImage.width;
-  const pixelHeight = decodedImage.height;
+  const imagePixelWidth = decodedImage.width;
+  const imagePixelHeight = decodedImage.height;
 
   let resolution;
   if (settings.width) {
-    resolution = Math.ceil(pixelWidth / settings.width);
+    resolution = Math.ceil(imagePixelWidth / settings.width);
   } else {
-    resolution = (columns < rows * 2)
-      ? pixelWidth / columns
-      : pixelHeight / (rows - 2) / 2;
+    resolution = (terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2)
+      ? imagePixelWidth / terminalWidth
+      : imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
   }
 
   let outputString = "";
-  for (let y = resolution; y < pixelHeight; y += resolution * 2) {
-    for (let x = resolution/2; x < pixelWidth; x += resolution) {
+  for (let y = resolution; y < imagePixelHeight; y += resolution * 2) {
+    for (let x = resolution/2; x < imagePixelWidth; x += resolution) {
       const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
       const grayscaleValue = (pixelColor.r + pixelColor.g + pixelColor.b) / 3;
 
