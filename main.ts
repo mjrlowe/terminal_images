@@ -1,5 +1,7 @@
 import { decodeJpeg } from "./deps.ts";
 
+console.log(Deno.stdout)
+
 const image_file_path = "./test_images/old_man.jpg";
 const character_map = ["█", "▓", "▒", "░", " "]; //["#", "/", ".", " "];
 
@@ -9,12 +11,16 @@ const raw = await Deno.readFile(image_file_path);
 
 const decodedImage = decodeJpeg(raw);
 
-const width = decodedImage.width;
-const height = decodedImage.height;
+const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+
+
+const pixelWidth = decodedImage.width;
+const pixelHeight = decodedImage.height;
 
 let outputString = "";
-for (let y = 0; y < height; y += width / 70) {
-  for (let x = 0; x < width; x += width / 140) {
+for (let y = 0; y < pixelHeight; y += pixelWidth / (columns-1)*2) {
+
+  for (let x = 0; x < pixelWidth; x += pixelWidth / (columns-1)) {
     const pixel = decodedImage.getPixel(Math.floor(x), Math.floor(y));
     const grayscaleValue = (pixel.r + pixel.g + pixel.b) / 3;
     let characterIndex = Math.floor(
@@ -25,5 +31,6 @@ for (let y = 0; y < height; y += width / 70) {
   }
   outputString += "\n";
 }
+
 
 console.log(outputString);
