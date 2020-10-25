@@ -14,7 +14,9 @@ to see a basic demo.
 
 ## Todo
 
-- [ ] Add some color! 🌈
+- [X] Add some color! 🌈
 - [ ] Add some tests.
 - [ ] Add some example images and example character maps.
 - [ ] Add documentation (shouldn't need to be too much)
+- [ ] Publish to nest.land.
+- [ ] Add support for using images loaded from the web (rather than just locally)
