@@ -1,9 +1,11 @@
 import { decodeJpeg } from "./deps.ts";
 
-const characters = ["#", "/", ".", " "];
+const image_file_path = "./test_images/old_man.jpg";
+const character_map = ["█", "▓", "▒", "░", " "]; //["#", "/", ".", " "];
+
 const inverted = true;
 
-const raw = await Deno.readFile("./man_shouting.jpg");
+const raw = await Deno.readFile(image_file_path);
 
 const decodedImage = decodeJpeg(raw);
 
@@ -16,10 +18,10 @@ for (let y = 0; y < height; y += width / 70) {
     const pixel = decodedImage.getPixel(Math.floor(x), Math.floor(y));
     const grayscaleValue = (pixel.r + pixel.g + pixel.b) / 3;
     let characterIndex = Math.floor(
-      grayscaleValue / 255 * (characters.length - 0.5),
+      grayscaleValue / 255 * (character_map.length - 0.5),
     );
-    characterIndex = inverted ? characters.length - 1 - characterIndex : characterIndex;
-    outputString += characters[characterIndex];
+    characterIndex = inverted ? character_map.length - 1 - characterIndex : characterIndex;
+    outputString += character_map[characterIndex];
   }
   outputString += "\n";
 }
