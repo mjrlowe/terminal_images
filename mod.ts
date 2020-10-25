@@ -1,18 +1,71 @@
 import { decodeJpeg, decodePng } from "./deps.ts";
 
-const character_map = "█▓▒░ "; //"#@%M+:,. "
+interface imageSettings {
+  path: string;
+  characterMap?: string;
+  width?: number;
+  inverted?: boolean;
+}
 
-const inverted = false;
+async function getImageString(settings: imageSettings): Promise<string> {
+  const path = settings.path;
+  const characterMap = settings.characterMap ?? "█▓▒░ ";
+  const inverted = settings.inverted ?? false;
 
-async function getImageString(image_file_path: string): Promise<string> {
-  const raw = await Deno.readFile(image_file_path);
+  const raw = await Deno.readFile(path);
 
-  const fileExtension = image_file_path.substr(
-    image_file_path.lastIndexOf(".") + 1,
+  console.log()
+
+  const fileExtension = path.substr(
+    path.lastIndexOf(".") + 1,
   ).toLowerCase();
 
+  const decodedImage = decodeImage(raw, fileExtension);
+
+  const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
+
+  const pixelWidth = decodedImage.width;
+  const pixelHeight = decodedImage.height;
+
+  let resolution;
+  if (settings.width) {
+    resolution = Math.ceil(pixelWidth / settings.width);
+  } else {
+    resolution = (columns < rows * 2)
+      ? pixelWidth / columns
+      : pixelHeight / (rows - 2) / 2;
+  }
+
+  let outputString = "";
+  for (let y = resolution; y < pixelHeight; y += resolution * 2) {
+    for (let x = resolution/2; x < pixelWidth; x += resolution) {
+      const pixel = decodedImage.getPixel(Math.floor(x), Math.floor(y));
+      const grayscaleValue = (pixel.r + pixel.g + pixel.b) / 3;
+
+      if(grayscaleValue === undefined) throw `Error parsing pixel (${x}, ${y})`
+
+      let characterIndex = Math.floor(
+        grayscaleValue / 255 * (characterMap.length - 0.5),
+      );
+      characterIndex = inverted
+        ? characterMap.length - 1 - characterIndex
+        : characterIndex;
+
+      outputString += characterMap[characterIndex];
+    }
+    outputString += "\n";
+  }
+
+  return outputString;
+}
+
+async function printImageString(settings: imageSettings): Promise<void> {
+  console.log(await getImageString(settings));
+}
+
+function decodeImage(raw:Uint8Array, format:string) {
   let decodedImage;
-  switch (fileExtension) {
+  switch (format) {
     case "jpg":
     case "jpeg":
       decodedImage = decodeJpeg(raw);
@@ -23,7 +76,7 @@ async function getImageString(image_file_path: string): Promise<string> {
       break;
 
     default:
-      throw `Image format ${fileExtension} not supported.`;
+      throw `Image format ${format} not supported.`;
   }
 
   decodedImage.getPixel = function (x: number, y: number) {
@@ -56,42 +109,8 @@ async function getImageString(image_file_path: string): Promise<string> {
     }
     return pixelData;
   };
-
-  const { columns, rows } = Deno.consoleSize(Deno.stdout.rid);
-
-  const pixelWidth = decodedImage.width;
-  const pixelHeight = decodedImage.height;
-
-  const resolution = (columns < rows * 2)
-    ? pixelWidth / columns
-    : pixelHeight / (rows - 2) / 2;
-
-  let outputString = "";
-  for (let y = 0; y < pixelHeight; y += resolution * 2) {
-    for (let x = 0; x < pixelWidth; x += resolution) {
-      const pixel = decodedImage.getPixel(Math.floor(x), Math.floor(y));
-      const grayscaleValue = (pixel.r + pixel.g + pixel.b) / 3;
-      let characterIndex = Math.floor(
-        grayscaleValue / 255 * (character_map.length - 0.5),
-      );
-      characterIndex = inverted
-        ? character_map.length - 1 - characterIndex
-        : characterIndex;
-
-      if (character_map[characterIndex] === undefined) {
-        outputString += "X";
-      } else {
-        outputString += character_map[characterIndex];
-      }
-    }
-    outputString += "\n";
-  }
-
-  return outputString;
-}
-
-async function printImageString(image_file_path: string): Promise<void> {
-  console.log(await getImageString(image_file_path));
+  return decodedImage;
 }
 
 export { getImageString, printImageString };
+export type {imageSettings};
