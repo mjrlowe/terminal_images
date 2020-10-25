@@ -1,16 +1,18 @@
-import { decodeJpeg, decodePng } from "./deps.ts";
+import { decodeJpeg, decodePng, colors } from "./deps.ts";
 
 interface imageSettings {
   path: string;
   characterMap?: string;
   width?: number;
   inverted?: boolean;
+  color?: boolean;
 }
 
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
   const characterMap = settings.characterMap ?? "█▓▒░ ";
   const inverted = settings.inverted ?? false;
+  const color = settings.color ?? false;
 
   const raw = await Deno.readFile(path);
 
@@ -39,8 +41,8 @@ async function getImageString(settings: imageSettings): Promise<string> {
   let outputString = "";
   for (let y = resolution; y < pixelHeight; y += resolution * 2) {
     for (let x = resolution/2; x < pixelWidth; x += resolution) {
-      const pixel = decodedImage.getPixel(Math.floor(x), Math.floor(y));
-      const grayscaleValue = (pixel.r + pixel.g + pixel.b) / 3;
+      const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
+      const grayscaleValue = (pixelColor.r + pixelColor.g + pixelColor.b) / 3;
 
       if(grayscaleValue === undefined) throw `Error parsing pixel (${x}, ${y})`
 
@@ -51,7 +53,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
         ? characterMap.length - 1 - characterIndex
         : characterIndex;
 
-      outputString += characterMap[characterIndex];
+      outputString += color ? colors.rgb24("█", pixelColor) : characterMap[characterIndex];
     }
     outputString += "\n";
   }
