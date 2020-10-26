@@ -12,13 +12,22 @@ deno run --allow-read --unstable https://deno.land/x/terminal_images/cli.ts --fi
 ```
 to see a basic demo.
 
+| Property | Type | Description | Default Value | CLI Flag |
+|-|-|-|-|-|
+| `path` | string | The path or URL of the image. | No default | `--file` or `-f` |
+| `color` | boolean | Whether to use colored pixel blocks (█) for the output. If set to `true`, this will override the character map. | `false` | `--color` or `-c` |
+| `characterMap` | string \| string[] | See the section on character maps for more information. | `"█▓▒░ "` | `--character-map` or `-m` |
+| `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Set it to true if your terminal is in dark mode.  | `false` | `--inverted` or `-i` |
+| `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `w` |
+
+
 ## Todo
 
 - [X] Add some color 🌈
 - [ ] Add some tests
 - [ ] Add some example output images
 - [ ] Add some example character maps
-- [ ] Add documentation for the user in README.md
+- [ ] Finish documentation for the user in README.md
 - [ ] Add jsdoc documentation in the code
 - [X] Publish to nest.land
 - [X] Add support for using images loaded from the web (rather than just locally)
