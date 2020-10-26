@@ -27,3 +27,4 @@ to see a basic demo.
 - [ ] Add support for GIF images
 - [ ] Allow the user to input an array of strings for the character map
 - [ ] Way to get higher resolution outputs for color mode?
+- [ ] Better error handling (e.g. 404 when fetching image)
