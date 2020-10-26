@@ -31,11 +31,15 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   }
 
-  const fileExtension = path.substr(
-    path.lastIndexOf(".") + 1,
-  ).toLowerCase();
+  const imageFileType = getFileType(raw);
+  if(imageFileType === "unknown"){
+    const fileExtension = path.substr(
+      path.lastIndexOf(".") + 1,
+    ).toLowerCase();
+    throw `Image file type not supported. (${fileExtension})`
+  }
 
-  const decodedImage = decodeImage(raw, fileExtension);
+  const decodedImage = decodeImage(raw, imageFileType);
 
   const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
   const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
@@ -83,7 +87,6 @@ function decodeImage(raw:Uint8Array, format:string) {
   let decodedImage;
   switch (format) {
     case "jpg":
-    case "jpeg":
       decodedImage = decodeJpeg(raw);
       break;
 
@@ -92,7 +95,7 @@ function decodeImage(raw:Uint8Array, format:string) {
       break;
 
     default:
-      throw `Image format ${format} not supported.`;
+      throw `Image format ${format} not supported. Also, this error message should be unreachable. :/`;
   }
 
   decodedImage.getPixel = function (x: number, y: number) {
@@ -126,6 +129,17 @@ function decodeImage(raw:Uint8Array, format:string) {
     return pixelData;
   };
   return decodedImage;
+}
+
+function getFileType(raw:Uint8Array):string{
+  const PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82];
+  const JPG_SIGNATURE = [255, 216, 255];
+
+  if(String(raw.slice(0, PNG_SIGNATURE.length)) === String(PNG_SIGNATURE)) return "png";
+  if(String(raw.slice(0, JPG_SIGNATURE.length)) === String(JPG_SIGNATURE)) return "jpg";
+  
+  return "unknown"
+
 }
 
 export { getImageString, printImageString };

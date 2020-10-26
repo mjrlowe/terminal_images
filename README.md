@@ -22,7 +22,7 @@ to see a basic demo.
 - [ ] Add jsdoc documentation in the code
 - [X] Publish to nest.land
 - [X] Add support for using images loaded from the web (rather than just locally)
-- [ ] Auto-detect file format (no need to rely on the file extension)
+- [X] Auto-detect file format (no need to rely on the file extension)
 - [ ] Add support for webp images
 - [ ] Add support for GIF images
 - [ ] Allow the user to input an array of strings for the character map
