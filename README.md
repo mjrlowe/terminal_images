@@ -23,18 +23,18 @@ to see a basic demo.
 
 ## Todo
 
-- [X] Add some color 🌈
-- [ ] Add some tests
-- [ ] Add some example output images
-- [ ] Add some example character maps
-- [ ] Finish documentation for the user in README.md
-- [ ] Add jsdoc documentation in the code
+- [X] Add some color
 - [X] Publish to nest.land
 - [X] Add support for using images loaded from the web (rather than just locally)
 - [X] Auto-detect file format (no need to rely on the file extension)
-- [ ] Add support for webp images
-- [ ] Add support for GIF images
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
+- [ ] Finish documentation for the user in README.md
+- [ ] Add some example output images
+- [ ] Add some example character maps
+- [ ] Add jsdoc documentation in the code
+- [ ] Add some tests
+- [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Better error handling (e.g. 404 when fetching image)
-- [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
+- [ ] Add support for webp images
+- [ ] Add support for GIF images
