@@ -14,13 +14,16 @@ to see a basic demo.
 
 ## Todo
 
-- [X] Add some color! 🌈
-- [ ] Add some tests.
-- [ ] Add some example images and example character maps.
-- [ ] Add documentation (shouldn't need to be too much)
-- [ ] Publish to nest.land.
+- [X] Add some color 🌈
+- [ ] Add some tests
+- [ ] Add some example output images
+- [ ] Add some example character maps
+- [ ] Add documentation for the user in README.md
+- [ ] Add jsdoc documentation in the code
+- [ ] Publish to nest.land
 - [X] Add support for using images loaded from the web (rather than just locally)
 - [ ] Auto-detect file format (no need to rely on the file extension)
 - [ ] Add support for webp images
 - [ ] Add support for GIF images
 - [ ] Allow the user to input an array of strings for the character map
+- [ ] Way to get higher resolution outputs for color mode?
