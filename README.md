@@ -37,3 +37,4 @@ to see a basic demo.
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Better error handling (e.g. 404 when fetching image)
+- [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
