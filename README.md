@@ -20,7 +20,7 @@ to see a basic demo.
 - [ ] Add some example character maps
 - [ ] Add documentation for the user in README.md
 - [ ] Add jsdoc documentation in the code
-- [ ] Publish to nest.land
+- [X] Publish to nest.land
 - [X] Add support for using images loaded from the web (rather than just locally)
 - [ ] Auto-detect file format (no need to rely on the file extension)
 - [ ] Add support for webp images
