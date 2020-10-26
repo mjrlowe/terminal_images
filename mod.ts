@@ -16,9 +16,20 @@ async function getImageString(settings: imageSettings): Promise<string> {
   const inverted = settings.inverted ?? false;
   const color = settings.color ?? false;
 
-  const raw = await Deno.readFile(path);
+  let raw;
 
-  console.log()
+  //external file on the internet (requires --allow-net)
+  if(path.startsWith("https://") || path.startsWith("http://")){
+
+    const response = await fetch(path)
+    raw = new Uint8Array(await response.arrayBuffer());
+
+  //local file (requires --allow-read)
+  }else{
+
+    raw = await Deno.readFile(path);
+
+  }
 
   const fileExtension = path.substr(
     path.lastIndexOf(".") + 1,
@@ -26,7 +37,6 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   const decodedImage = decodeImage(raw, fileExtension);
 
-  console.log(Deno.consoleSize(Deno.stdout.rid));
   const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
   const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
 

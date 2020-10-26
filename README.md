@@ -19,4 +19,8 @@ to see a basic demo.
 - [ ] Add some example images and example character maps.
 - [ ] Add documentation (shouldn't need to be too much)
 - [ ] Publish to nest.land.
-- [ ] Add support for using images loaded from the web (rather than just locally)
+- [X] Add support for using images loaded from the web (rather than just locally)
+- [ ] Auto-detect file format (no need to rely on the file extension)
+- [ ] Add support for webp images
+- [ ] Add support for GIF images
+- [ ] Allow the user to input an array of strings for the character map
