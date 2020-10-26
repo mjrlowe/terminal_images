@@ -2,7 +2,7 @@ import { decodeJpeg, decodePng, colors } from "./deps.ts";
 
 interface imageSettings {
   path: string;
-  characterMap?: string;
+  characterMap?: string | string[];
   width?: number;
   inverted?: boolean;
   color?: boolean;

@@ -25,6 +25,6 @@ to see a basic demo.
 - [X] Auto-detect file format (no need to rely on the file extension)
 - [ ] Add support for webp images
 - [ ] Add support for GIF images
-- [ ] Allow the user to input an array of strings for the character map
+- [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Better error handling (e.g. 404 when fetching image)
