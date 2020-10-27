@@ -64,7 +64,7 @@ printImageString({
 
 This should output something like this:
 
-!(pixelated terminal image)[./images/color_terminal_output_example.png]
+![pixelated terminal image](./images/color_terminal_output_example.png)
 
 | Property | Type | Description | Default Value | CLI Flag |
 |-|-|-|-|-|
