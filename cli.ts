@@ -3,6 +3,8 @@ import { parse } from "./deps.ts";
 
 const parsedArgs = parse(Deno.args);
 
+console.log(Deno.args, parsedArgs)
+
 const textImageSettings: imageSettings = {
   path: parsedArgs.file ?? parsedArgs.f 
 };

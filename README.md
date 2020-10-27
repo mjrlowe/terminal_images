@@ -6,6 +6,44 @@
 
 Currently only PNG and JPG images are supported.
 
+To install the CLI tool, run the following from the command line:
+
+```shell
+deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@0.2.0/cli.ts
+```
+
+Then run 
+```shell
+terminal images --file="https://deno.land/images/hashrock_simple.png" --character-map="   % @"
+```
+...and you should see something like this displayed in your terminal:
+```
+                 @@@@@@@@@@@@@@                 
+            @@@@@@@@ @@    @@@@@@@@@            
+         @@@@@       @@    @@     @@@@@         
+       @@@@         @@@              @@@@       
+     @@@@ @@@       @@                 @@@@     
+    @@@   @@@                  @@        @@@    
+  @@@@@  @@@      %%%%%%%%%%  @@@         @@@@  
+  @@@@   @@   %%%%%%%%%%%%%%%%%%       @@  @@@  
+ @@@        %%%%%%%%%%%%%%%%%%%%%%    @@@   @@@ 
+@@@        %%%%%%%%%%%%   %%%%%%%%%   @@     @@@
+@@@       %%%%%%%%%%%%%%%%%%%%%%%%%% @@@     @@@
+@@@     @ %%%%%%%%%%%%%%%%%%%%%%%%%%%     @@@@@@
+@@@    @@ %%%%%%%%%%%%%%%%%%%%%%%%%%%%    @@@@@@
+@@@   @@@ %%%%%%%%%%%%%%%%%%%%%%%%%%%%    @@ @@@
+@@@   @@    %%%%%%%%%%%%%%%%%%%%%%%%%%%  @@  @@@
+ @@@  @     @@%%%%%%%%%%%%%%%%%%%%%%%%%     @@@ 
+  @@@      @@@         %%%%%%%%%%%%%%%%%   @@@  
+  @@@@     @@           %%%%%%%%%%%%%%%%  @@@@  
+    @@@    @@         @@%%%%%%%%%%%%%%%%%@@@    
+     @@@@       @@   @@@ %%%%%%%%%%%%%% @@@     
+       @@@@    @@@   @@  %%%%%%%%%%%%@@@@       
+         @@@@@@@@   @@@   %%%%%%%%@@@@@         
+            @@@@@@@@      %% @@@@@@@            
+                 @@@@@@@@@@@@@@                 
+```
+
 Run
 ```shell
 deno run --allow-read --unstable https://deno.land/x/terminal_images/cli.ts --file="./path/to/image.jpg"
