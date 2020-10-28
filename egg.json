@@ -4,7 +4,7 @@
   "entry": "./mod.ts",
   "description": "A Deno module and CLI tool for displaying images in the terminal",
   "homepage": "https://github.com/TheWizardBear/terminal_images",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "unstable": true,
   "files": [
     "./README.md",
@@ -12,7 +12,8 @@
     "./LICENSE",
     "./deps.ts",
     "./cli.ts",
-    "./.gitignore"
+    "./.gitignore",
+    "./images/*"
   ],
   "checkFormat": false,
   "checkTests": false,
