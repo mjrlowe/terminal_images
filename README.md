@@ -90,9 +90,14 @@ By default, the character map is set to `"█▓▒░ "`, but you can override 
 
 ### Some tips for using character maps:
 
-* You can generate ASCII art by using character maps such as `"@#?)l+-. "`
+* Simple images with recognisable shapes and high contrast work the best. (Although if you aren't aiming for functionality, go wild!)
+* Normally you will want to invert the character map if your terminal is in a dark theme.
+* You can generate ASCII art by using character maps such as `"@#?)l+-. "`.
+* Make sure you have escaped any characters you need to with a back to slash (`\`). 
+* You don't have to sort your characters from darksest to lightest or vice versa. Play around with what works for specfic images, and see if you can create any interesting effects.
+* Padding your character maps can be useful when brightness is not evenly distributed. For example, if your image has mostly dark tones, then your character map might look something like this: "█▓▒░░    " (assuming it the start of the character map represents the darker tones) as this will make it easier to distinguish between similar colors.
 
-Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not currently work when you are using a character map string. _You can get them to work by using a character map array, but this isn't possible with the CLI tool._
+Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not work when you are using a character map string. You can get them to work by using a character map array, but this isn't possible with the CLI tool.
 
 
 ## Required Permissions
@@ -116,15 +121,21 @@ For more example outputs, have a look at the images folder.
 - [X] Add support for using images loaded from the web (rather than just locally)
 - [X] Auto-detect file format (no need to rely on the file extension)
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
-- [ ] Finish documentation for the user in README.md
-- [X] Add some example output images
-- [ ] Add some example character maps
+- [ ] Finish the documentation in README.md
 - [ ] Add jsdoc documentation in the code
 - [ ] Add some tests
 - [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
 - [ ] Way to get higher resolution outputs for color mode?
+- [ ] Detect whether terminal theme is light or dark automatically?
 - [ ] Better error handling (e.g. 404 when fetching image)
-- 
 - [ ] Add support for webp images
 - [ ] Add support for GIF images
 - [ ] Add support for TIFF images
+
+## Contributions
+
+Contributions are welcome! Just pick something to do (the todo list above is a good starting point) and let me know you want to work on it by opening an issue or commenting on a relevant existing issue.
+
+## License 
+
+**terminal_images** is under the open source MIT license. See the LICENSE file for legal words. 
