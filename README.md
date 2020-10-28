@@ -70,6 +70,8 @@ This should output something like this:
 
 ![pixelated terminal image](./images/color_terminal_output_example.png)
 
+## API
+
 | Property | Type | Description | Default Value | CLI Flag |
 |-|-|-|-|-|
 | `path` | string | The path or URL of the image. | No default | `--file` or `-f` |
@@ -86,17 +88,26 @@ The characters at the beginning of the character map should be the darkest and t
 
 By default, the character map is set to `"█▓▒░ "`, but you can override this with any string you want. If you are using the module, you can set the character map to an array of strings, where each element will be used as a pixel color (rather than each character of the string).
 
+### Some tips for using character maps:
 
-Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not work when you are using a character map string. _You can get them to work by using a character map array, but this isn't possible with the CLI tool._
+* You can generate ASCII art by using character maps such as `"@#?)l+-. "`
+
+Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not currently work when you are using a character map string. _You can get them to work by using a character map array, but this isn't possible with the CLI tool._
 
 
 ## Required Permissions
 
 |Flag| R |Reason|
 |:--|:-:|:--|
-| 🚧 `--unstable` | * | To detect the size of your terminal |
-| 🌐 `--allow-net` | _ | To fetch images from the web |
-| 🔍 `--allow-read` | _ | To use images stored locally |
+| `--unstable` | * | To detect the size of your terminal |
+| `--allow-net` | _ | To fetch images from the web |
+| `--allow-read` | _ | To use images stored locally |
+
+## Examples
+
+![Inverted image loaded from unsplash](./images/unsplash_photo_with_inverted_character_map)
+
+For more example outputs, have a look at the images folder.
 
 ## Todo
 
@@ -113,6 +124,7 @@ Currently characters that JavaScript handles as having a length of greater than 
 - [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Better error handling (e.g. 404 when fetching image)
+- 
 - [ ] Add support for webp images
 - [ ] Add support for GIF images
 - [ ] Add support for TIFF images
