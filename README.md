@@ -105,7 +105,7 @@ Currently characters that JavaScript handles as having a length of greater than 
 
 ## Examples
 
-![Inverted image loaded from unsplash](./images/unsplash_photo_with_inverted_character_map)
+![Inverted image loaded from unsplash](./images/unsplash_photo_with_inverted_character_map.png)
 
 For more example outputs, have a look at the images folder.
 
