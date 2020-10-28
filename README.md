@@ -80,6 +80,8 @@ This should output something like this:
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
 | `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `w` |
 
+_Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution if the font size is smaller and the terminal window is larger, as more can fit on the screen._
+
 ## Character map?
 
 The "character map" is the characters that are used to display the image (when `color` is `false`).
