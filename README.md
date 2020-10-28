@@ -1,7 +1,5 @@
 # terminal_images
 
-> This module is WIP. Expect breaking changes.
-
 **terminal_images** is a Deno module and CLI tool, written in TypeScript, for displaying images in the terminal.
 
 Currently only PNG and JPG images are supported.
@@ -14,7 +12,7 @@ deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_im
 
 Then run 
 ```shell
-terminal images --file="https://deno.land/images/hashrock_simple.png" --character-map="   % @"
+terminal_images --file="https://deno.land/images/hashrock_simple.png" --character-map="   % @"
 ```
 ...and you should see something like this displayed in your terminal:
 ```
@@ -43,7 +41,12 @@ terminal images --file="https://deno.land/images/hashrock_simple.png" --characte
             @@@@@@@@      %% @@@@@@@            
                  @@@@@@@@@@@@@@                 
 ```
- You can also use the module. For example:
+_Note that the size might be different, as by default it adapts to the size of your terminal._
+
+
+ You can also use the module, which has exports two functions: `getImageString` and `printImageString`, which both take in an object with the same properties.
+ 
+ Here is an example of how you can use it:
 
  ```ts
 import { printImageString } from "https://x.nest.land/terminal_images@1.0.0/mod.ts";
@@ -53,7 +56,8 @@ printImageString({
   //replace this with the local path or URL of the image you want to print out
   path: "https://deno.land/images/deno_city.jpeg",
 
-  //setting this to true overrides the character map and prints it out as a pixelated and colored image
+  //setting this to true overrides the character map
+  // and prints it out as a pixelated and colored image
   color: true,
 
   //by default the size of the image is set to fit in the terminal, 
@@ -74,6 +78,17 @@ This should output something like this:
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
 | `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `w` |
 
+## Character map?
+
+The "character map" is the characters that are used to display the image (when `color` is `false`).
+
+The characters at the beginning of the character map should be the darkest and the ones at the end be the lightest. You can switch this around by using the `inverted` flag/property.
+
+By default, the character map is set to `"█▓▒░ "`, but you can override this with any string you want. If you are using the module, you can set the character map to an array of strings, where each element will be used as a pixel color (rather than each character of the string).
+
+
+Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not work when you are using a character map string. _You can get them to work by using a character map array, but this isn't possible with the CLI tool._
+
 
 ## Todo
 
@@ -83,7 +98,7 @@ This should output something like this:
 - [X] Auto-detect file format (no need to rely on the file extension)
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
 - [ ] Finish documentation for the user in README.md
-- [ ] Add some example output images
+- [X] Add some example output images
 - [ ] Add some example character maps
 - [ ] Add jsdoc documentation in the code
 - [ ] Add some tests
