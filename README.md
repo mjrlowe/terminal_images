@@ -90,6 +90,14 @@ By default, the character map is set to `"█▓▒░ "`, but you can override 
 Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not work when you are using a character map string. _You can get them to work by using a character map array, but this isn't possible with the CLI tool._
 
 
+## Required Permissions
+
+|Flag| R |Reason|
+|:--|:-:|:--|
+| 🚧 `--unstable` | * | To detect the size of your terminal |
+| 🌐 `--allow-net` | _ | To fetch images from the web |
+| 🔍 `--allow-read` | _ | To use images stored locally |
+
 ## Todo
 
 - [X] Add some color
