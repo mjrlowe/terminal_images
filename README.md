@@ -7,7 +7,7 @@ Currently only PNG and JPG images are supported.
 To install the CLI tool, run the following from the command line:
 
 ```shell
-deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@0.2.0/cli.ts
+deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@1.0.0/cli.ts
 ```
 
 Then run 
@@ -53,15 +53,15 @@ import { printImageString } from "https://x.nest.land/terminal_images@1.0.0/mod.
 
 printImageString({
 
-  //replace this with the local path or URL of the image you want to print out
+  // replace this with the URL or local file path of the image you want to print out
   path: "https://deno.land/images/deno_city.jpeg",
 
-  //setting this to true overrides the character map
+  // setting this to true overrides the character map
   // and prints it out as a pixelated and colored image
   color: true,
 
-  //by default the size of the image is set to fit in the terminal, 
-  //but you can override it with the width property
+  // by default the size of the image is set to fit in the terminal, 
+  // but you can override it with the width property
   width: 56
 })
 ```
@@ -80,7 +80,7 @@ This should output something like this:
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
 | `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `w` |
 
-_Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution if the font size is smaller and the terminal window is larger, as more can fit on the screen._
+_Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution if the font size is smaller and the terminal window is larger, as more can fit on the screen (unless you manually set the width)._
 
 ## Character map?
 
@@ -97,7 +97,8 @@ By default, the character map is set to `"█▓▒░ "`, but you can override 
 * You can generate ASCII art by using character maps such as `"@#?)l+-. "`.
 * Make sure you have escaped any characters you need to with a back to slash (`\`). 
 * You don't have to sort your characters from darksest to lightest or vice versa. Play around with what works for specfic images, and see if you can create any interesting effects.
-* Padding your character maps can be useful when brightness is not evenly distributed. For example, if your image has mostly dark tones, then your character map might look something like this: "█▓▒░░    " (assuming it the start of the character map represents the darker tones) as this will make it easier to distinguish between similar colors.
+* Padding your character maps can be useful when brightness is not evenly distributed. For example, if your image has mostly dark tones, then your character map might look something like this: `"█▓▒░░    "` (assuming it the start of the character map represents the darker tones) as this will make it easier to distinguish between similar colors.
+* Currently there is a bug in std/flags which means that using the shortened/alias flag (`-m`) won't work if there is an `=` character in the character map. You will have to use `--character-map` instead.
 
 Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not work when you are using a character map string. You can get them to work by using a character map array, but this isn't possible with the CLI tool.
 
