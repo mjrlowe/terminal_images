@@ -78,9 +78,9 @@ This should output something like this:
 | `color` | boolean | Whether to use colored pixel blocks (█) for the output. If set to `true`, this will override the character map. | `false` | `--color` or `-c` |
 | `characterMap` | string \| string[] | See the section on character maps for more information. | `"█▓▒░ "` | `--character-map` or `-m` |
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
-| `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `w` |
+| `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `-w` |
 
-_Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution if the font size is smaller and the terminal window is larger, as more can fit on the screen (unless you manually set the width)._
+_Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution (unless you have manually set `width`) if the font size is smaller and the terminal window is larger, as more can fit on the screen._
 
 ## Character map?
 
@@ -124,7 +124,7 @@ For more example outputs, have a look at the images folder.
 - [X] Add support for using images loaded from the web (rather than just locally)
 - [X] Auto-detect file format (no need to rely on the file extension)
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
-- [ ] Finish the documentation in README.md
+- [X] Finish the documentation in README.md
 - [ ] Add jsdoc documentation in the code
 - [ ] Add some tests
 - [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
