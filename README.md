@@ -98,7 +98,7 @@ By default, the character map is set to `"█▓▒░ "`, but you can override 
 * Make sure you have escaped any characters you need to with a back to slash (`\`). 
 * You don't have to sort your characters from darksest to lightest or vice versa. Play around with what works for specfic images, and see if you can create any interesting effects.
 * Padding your character maps can be useful when brightness is not evenly distributed. For example, if your image has mostly dark tones, then your character map might have some extra spaces on the end, so that it is easier to distinguish between darker colors than lighter ones.
-* Currently there is a bug in std/flags which means that using the shortened/alias flag (`-m`) won't work if there is an `=` character in the character map. You will have to use `--character-map` instead.
+* Try to make characters next to each other in the character map similar. For example, don't put a `.` after a `'` as one is displayed much lower down than the other.
 
 Currently characters that JavaScript handles as having a length of greater than 1 (like emojis) do not work when you are using a character map string. You can get them to work by using a character map array, but this isn't possible with the CLI tool.
 
