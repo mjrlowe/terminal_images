@@ -1,4 +1,4 @@
-import { decodeJpeg, decodePng, colors } from "./deps.ts";
+import { colors, decodeJpeg, decodePng } from "./deps.ts";
 
 interface imageSettings {
   path: string;
@@ -22,24 +22,21 @@ async function getImageString(settings: imageSettings): Promise<string> {
   let raw;
 
   //external file on the internet (requires --allow-net)
-  if(path.startsWith("https://") || path.startsWith("http://")){
-
-    const response = await fetch(path)
+  if (path.startsWith("https://") || path.startsWith("http://")) {
+    const response = await fetch(path);
     raw = new Uint8Array(await response.arrayBuffer());
 
-  //local file (requires --allow-read)
-  }else{
-
+    //local file (requires --allow-read)
+  } else {
     raw = await Deno.readFile(path);
-
   }
 
   const imageFileType = getFileType(raw);
-  if(imageFileType === "unknown"){
+  if (imageFileType === "unknown") {
     const fileExtension = path.substr(
       path.lastIndexOf(".") + 1,
     ).toLowerCase();
-    throw `Image file type not supported. (${fileExtension})`
+    throw `Image file type not supported. (${fileExtension})`;
   }
 
   const decodedImage = decodeImage(raw, imageFileType);
@@ -61,11 +58,13 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   let outputString = "";
   for (let y = resolution; y < imagePixelHeight; y += resolution * 2) {
-    for (let x = resolution/2; x < imagePixelWidth; x += resolution) {
+    for (let x = resolution / 2; x < imagePixelWidth; x += resolution) {
       const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
       const grayscaleValue = (pixelColor.r + pixelColor.g + pixelColor.b) / 3;
 
-      if(grayscaleValue === undefined) throw `Error parsing pixel (${x}, ${y})`
+      if (grayscaleValue === undefined) {
+        throw `Error parsing pixel (${x}, ${y})`;
+      }
 
       let characterIndex = Math.floor(
         grayscaleValue / 255 * (characterMap.length - 0.5),
@@ -74,15 +73,15 @@ async function getImageString(settings: imageSettings): Promise<string> {
         ? characterMap.length - 1 - characterIndex
         : characterIndex;
 
-      outputString += color ? colors.rgb24("█", pixelColor) : characterMap[characterIndex];
+      outputString += color
+        ? colors.rgb24("█", pixelColor)
+        : characterMap[characterIndex];
     }
     outputString += "\n";
   }
 
   return outputString;
 }
-
-
 
 /**
  * Outputs the image to the console.
@@ -91,7 +90,7 @@ async function printImageString(settings: imageSettings): Promise<void> {
   console.log(await getImageString(settings));
 }
 
-function decodeImage(raw:Uint8Array, format:string) {
+function decodeImage(raw: Uint8Array, format: string) {
   let decodedImage;
   switch (format) {
     case "jpg":
@@ -139,16 +138,40 @@ function decodeImage(raw:Uint8Array, format:string) {
   return decodedImage;
 }
 
-function getFileType(raw:Uint8Array):string{
-  const PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82];
+function getFileType(raw: Uint8Array): string {
+  const PNG_SIGNATURE = [
+    137,
+    80,
+    78,
+    71,
+    13,
+    10,
+    26,
+    10,
+    0,
+    0,
+    0,
+    13,
+    73,
+    72,
+    68,
+    82,
+  ];
   const JPG_SIGNATURE = [255, 216, 255];
 
-  if(String(raw.slice(0, PNG_SIGNATURE.length)) === String(PNG_SIGNATURE)) return "png";
-  if(String(raw.slice(0, JPG_SIGNATURE.length)) === String(JPG_SIGNATURE)) return "jpg";
-  
-  return "unknown"
+  if (
+    String(raw.slice(0, PNG_SIGNATURE.length)) === String(PNG_SIGNATURE)
+  ) {
+    return "png";
+  }
+  if (
+    String(raw.slice(0, JPG_SIGNATURE.length)) === String(JPG_SIGNATURE)
+  ) {
+    return "jpg";
+  }
 
+  return "unknown";
 }
 
 export { getImageString, printImageString };
-export type {imageSettings};
+export type { imageSettings };
