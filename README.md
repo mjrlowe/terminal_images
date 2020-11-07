@@ -125,7 +125,7 @@ For more example outputs, have a look at the images folder.
 - [X] Auto-detect file format (no need to rely on the file extension)
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
 - [X] Finish the documentation in README.md
-- [ ] Add jsdoc documentation in the code
+- [X] Add jsdoc documentation in the code
 - [ ] Add some tests
 - [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
 - [ ] Way to get higher resolution outputs for color mode?

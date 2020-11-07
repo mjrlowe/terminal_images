@@ -10,6 +10,9 @@ interface imageSettings {
 
 const MIN_AUTO_WIDTH = 12;
 
+/**
+ * Returns a promise which resolves to a string version of the image that can outputted to the console.
+ */
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
   const characterMap = settings.characterMap ?? "█▓▒░ ";
@@ -79,6 +82,11 @@ async function getImageString(settings: imageSettings): Promise<string> {
   return outputString;
 }
 
+
+
+/**
+ * Outputs the image to the console.
+ */
 async function printImageString(settings: imageSettings): Promise<void> {
   console.log(await getImageString(settings));
 }
