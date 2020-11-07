@@ -1,18 +1,21 @@
 import { colors, decodeJpeg, decodePng } from "./deps.ts";
 
 interface imageSettings {
+  /** The local file path or URL of the image */
   path: string;
+  /** The character map to use when outputting the image */
   characterMap?: string | string[];
+  /** The number of characters wide the output image is */
   width?: number;
+  /** whether the character map should be inverted */
   inverted?: boolean;
+  /** Whether the output image should be in color */
   color?: boolean;
 }
 
 const MIN_AUTO_WIDTH = 12;
 
-/**
- * Returns a promise which resolves to a string version of the image that can outputted to the console.
- */
+/** Returns a promise which resolves to a string version of the image that can outputted to the console. */
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
   const characterMap = settings.characterMap ?? "█▓▒░ ";
@@ -83,9 +86,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
   return outputString;
 }
 
-/**
- * Outputs the image to the console.
- */
+/** Outputs the image to the console. */
 async function printImageString(settings: imageSettings): Promise<void> {
   console.log(await getImageString(settings));
 }
