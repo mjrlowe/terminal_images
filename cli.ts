@@ -40,4 +40,27 @@ if(typeof textImageSettings.path != "undefined"){
   console.log(`terminal_images ${version}`)
 }else if (parsedArgs.version){
   console.log(`terminal_images ${version}\ndeno ${Deno.version.deno}`)
+}else if(parsedArgs.h || parsedArgs.help){
+  console.log(`
+INFO OPTIONS
+-h, --help
+  Prints help information
+-V, --version
+  Prints version information
+
+IMAGE PRINTING OPTIONS
+-f, --file <path>
+  The image URL/path of the input image (required)
+-w, --width <width>
+  The number of characters wde the output image should be
+-m, --character-map <character-map>
+  The character map to use for the output image
+-i, --inverted
+  Inverts the character map
+-c, --color
+  Sets to output image to be in color
+`
+  )
+}else{
+  console.error("Invalid command. Run --help for usage information.")
 }
