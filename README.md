@@ -7,7 +7,7 @@ Currently only PNG and JPG images are supported.
 To install the CLI tool, run the following from the command line:
 
 ```shell
-deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@1.0.0/cli.ts
+deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@1.0.1/cli.ts
 ```
 
 Then run 
@@ -49,7 +49,7 @@ _Note that the size might be different, as by default it adapts to the size of y
  Here is an example of how you can use it:
 
  ```ts
-import { printImageString } from "https://x.nest.land/terminal_images@1.0.0/mod.ts";
+import { printImageString } from "https://x.nest.land/terminal_images@1.0.1/mod.ts";
 
 printImageString({
 
@@ -139,6 +139,6 @@ For more example outputs, have a look at the images folder.
 
 Contributions are welcome! Just pick something to do (the todo list above is a good starting point) and let me know you want to work on it by opening an issue or commenting on a relevant existing issue.
 
-## License 
+## License
 
 **terminal_images** is under the open source MIT license. See the LICENSE file for legal words. 
