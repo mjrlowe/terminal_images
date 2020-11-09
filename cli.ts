@@ -40,5 +40,4 @@ if(typeof textImageSettings.path != "undefined"){
   console.log(`terminal_images ${version}`)
 }else if (parsedArgs.version){
   console.log(`terminal_images ${version}\ndeno ${Deno.version.deno}`)
-  
 }
