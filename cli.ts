@@ -8,8 +8,7 @@ const textImageSettings: imageSettings = {
   path: parsedArgs.file ?? parsedArgs.f,
 };
 
-if(typeof textImageSettings.path != "undefined"){
-
+if (typeof textImageSettings.path != "undefined") {
   if (parsedArgs["character-map"]) {
     textImageSettings.characterMap = String(parsedArgs["character-map"]);
   }
@@ -35,12 +34,11 @@ if(typeof textImageSettings.path != "undefined"){
   }
 
   await printImageString(textImageSettings);
-
-}else if (parsedArgs.V){
-  console.log(`terminal_images ${version}`)
-}else if (parsedArgs.version){
-  console.log(`terminal_images ${version}\ndeno ${Deno.version.deno}`)
-}else if(parsedArgs.h || parsedArgs.help){
+} else if (parsedArgs.V) {
+  console.log(`terminal_images ${version}`);
+} else if (parsedArgs.version) {
+  console.log(`terminal_images ${version}\ndeno ${Deno.version.deno}`);
+} else if (parsedArgs.h || parsedArgs.help) {
   console.log(`
 INFO OPTIONS
 -h, --help
@@ -59,8 +57,7 @@ IMAGE PRINTING OPTIONS
   Inverts the character map
 -c, --color
   Sets to output image to be in color
-`
-  )
-}else{
-  console.error("Invalid command. Run --help for usage information.")
+`);
+} else {
+  console.error("Invalid command. Run --help for usage information.");
 }
