@@ -13,6 +13,7 @@
     "./deps.ts",
     "./cli.ts",
     "./.gitignore",
+    "./version.ts"
     "./images/*"
   ],
   "checkFormat": false,
