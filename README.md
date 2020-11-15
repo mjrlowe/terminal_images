@@ -128,7 +128,8 @@ For more example outputs, have a look at the images folder.
 - [X] Add jsdoc documentation in the code
 - [X] Add support for unicode characters
 - [ ] Add some tests
-- [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters
+- [ ] Correctly handle square characters such as emojis
+- [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters (unless they aren't modifying anything and are visible)
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Detect whether terminal theme is light or dark automatically?
 - [ ] Better error handling (e.g. 404 when fetching image)
