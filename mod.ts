@@ -18,7 +18,7 @@ const MIN_AUTO_WIDTH = 12;
 /** Returns a promise which resolves to a string version of the image that can outputted to the console. */
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
-  const characterMap = settings.characterMap ?? "█▓▒░ ";
+  const characterMap = [...settings.characterMap] ?? ["█", "▓", "▒", "░", " "];
   const inverted = settings.inverted ?? false;
   const color = settings.color ?? false;
 

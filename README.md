@@ -126,8 +126,9 @@ For more example outputs, have a look at the images folder.
 - [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
 - [X] Finish the documentation in README.md
 - [X] Add jsdoc documentation in the code
+- [X] Add support for unicode characters
 - [ ] Add some tests
-- [ ] Add proper support for emojis and other characters that don't have length 1 in JavaScript
+- [ ] Don't count modifier characters (e.g.  emoji skin tones) as separate characters
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Detect whether terminal theme is light or dark automatically?
 - [ ] Better error handling (e.g. 404 when fetching image)
