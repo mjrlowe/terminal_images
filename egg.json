@@ -1,11 +1,10 @@
 {
-  "$schema": "https://x.nest.land/eggs@0.3.1/src/schema.json",
+  "$schema": "https://x.nest.land/eggs@0.3.2/src/schema.json",
   "name": "terminal_images",
   "entry": "./mod.ts",
   "description": "A Deno module and CLI tool for displaying images in the terminal",
   "homepage": "https://github.com/TheWizardBear/terminal_images",
   "version": "1.1.0",
-  "unstable": true,
   "files": [
     "./README.md",
     "./mod.ts",
@@ -13,7 +12,7 @@
     "./deps.ts",
     "./cli.ts",
     "./.gitignore",
-    "./version.ts"
+    "./version.ts",
     "./images/*"
   ],
   "checkFormat": false,
