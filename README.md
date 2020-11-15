@@ -7,7 +7,7 @@ Currently only PNG and JPG images are supported.
 To install the CLI tool, run the following from the command line:
 
 ```shell
-deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@1.0.1/cli.ts
+deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@1.1.0/cli.ts
 ```
 
 Then run 
@@ -49,7 +49,7 @@ _Note that the size might be different, as by default it adapts to the size of y
  Here is an example of how you can use it:
 
  ```ts
-import { printImageString } from "https://x.nest.land/terminal_images@1.0.1/mod.ts";
+import { printImageString } from "https://x.nest.land/terminal_images@1.1.0/mod.ts";
 
 printImageString({
 
@@ -128,7 +128,7 @@ For more example outputs, have a look at the images folder.
 - [X] Add jsdoc documentation in the code
 - [X] Add support for unicode characters
 - [ ] Add some tests
-- [ ] Don't count modifier characters (e.g.  emoji skin tones) as separate characters
+- [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters
 - [ ] Way to get higher resolution outputs for color mode?
 - [ ] Detect whether terminal theme is light or dark automatically?
 - [ ] Better error handling (e.g. 404 when fetching image)
