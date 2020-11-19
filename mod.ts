@@ -15,12 +15,13 @@ interface imageSettings {
 
 const MIN_AUTO_WIDTH = 12;
 
+//["█", "▓", "▒", "░", " "]
 /** Returns a promise which resolves to a string version of the image that can outputted to the console. */
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
   const characterMap = settings.characterMap
     ? [...settings.characterMap]
-    : ["█", "▓", "▒", "░", " "];
+    : undefined;
   const inverted = settings.inverted ?? false;
   const color = settings.color ?? false;
 
@@ -31,7 +32,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
     const response = await fetch(path);
     raw = new Uint8Array(await response.arrayBuffer());
 
-    //local file (requires --allow-read)
+  //local file (requires --allow-read)
   } else {
     raw = await Deno.readFile(path);
   }
@@ -62,74 +63,96 @@ async function getImageString(settings: imageSettings): Promise<string> {
   }
 
   let outputString = "";
-  for (let y = resolution; y < imagePixelHeight; y += resolution * 2) {
-    for (let x: number = resolution / 2; x < imagePixelWidth; x += resolution) {
-      let values = [
-        decodedImage.getPixel(
-          Math.floor(x - resolution / 4),
-          Math.floor(y - resolution / 2),
-        ),
-        decodedImage.getPixel(
-          Math.floor(x + resolution / 4),
-          Math.floor(y - resolution / 2),
-        ),
-        decodedImage.getPixel(
-          Math.floor(x - resolution / 4),
-          Math.floor(y + resolution / 2),
-        ),
-        decodedImage.getPixel(
-          Math.floor(x + resolution / 4),
-          Math.floor(y - resolution / 2),
-        ),
-      ];
+  for (let y = resolution; y < imagePixelHeight-resolution; y += resolution * 2) {
+    for (let x: number = resolution / 2; x < imagePixelWidth-resolution / 2; x += resolution) {
+      if (characterMap === undefined) {
+        let values = [
+          decodedImage.getPixel(
+            Math.floor(x - resolution / 4),
+            Math.floor(y - resolution / 2),
+          ),
+          decodedImage.getPixel(
+            Math.floor(x + resolution / 4),
+            Math.floor(y - resolution / 2),
+          ),
+          decodedImage.getPixel(
+            Math.floor(x - resolution / 4),
+            Math.floor(y + resolution / 2),
+          ),
+          decodedImage.getPixel(
+            Math.floor(x + resolution / 4),
+            Math.floor(y + resolution / 2),
+          ),
+        ];
 
-      const organisedValues = calculateGroups(values);
-      let characterIndex = 0;
-      let group1TotalColor = {r: 0, g:0, b:0};
-      let group2TotalColor = {r: 0, g:0, b:0};
-      let group1Count = 0;
-      let group2Count = 0;
-      for(let value of organisedValues){
-        if(value.group === 1){
-          group1TotalColor.r += value.color.r;
-          group1TotalColor.g += value.color.g;
-          group1TotalColor.b += value.color.b;
-          group1Count++;
-        }else{
-          group2TotalColor.r += value.color.r;
-          group2TotalColor.g += value.color.g;
-          group2TotalColor.b += value.color.b;
-          group2Count++;
+        const organisedValues = calculateGroups(values);
+        let characterIndex = 0;
+        let group0TotalColor = { r: 0, g: 0, b: 0 };
+        let group1TotalColor = { r: 0, g: 0, b: 0 };
+        let group0Count = 0;
+        let group1Count = 0;
+        for (let value of organisedValues) {
+          if (value.group === 0) {
+            group0TotalColor.r += value.color.r;
+            group0TotalColor.g += value.color.g;
+            group0TotalColor.b += value.color.b;
+            group0Count++;
+          } else {
+            group1TotalColor.r += value.color.r;
+            group1TotalColor.g += value.color.g;
+            group1TotalColor.b += value.color.b;
+            group1Count++;
+          }
+          characterIndex += 2 ** value.id * value.group;
         }
-        // console.log(value.id, (value.group-1))
-        characterIndex += 2**value.id * (value.group-1)
 
+        const backgroundColor = {
+          r: group0TotalColor.r / group0Count,
+          g: group0TotalColor.g / group0Count,
+          b: group0TotalColor.b / group0Count,
+        };
+        const foregroundColor = {
+          r: group1TotalColor.r / group1Count,
+          g: group1TotalColor.g / group1Count,
+          b: group1TotalColor.b / group1Count,
+        };
+
+        if(!color){
+          const backgroundLightness = colorLightness(backgroundColor);
+          const foregroundLightness = colorLightness(foregroundColor);
+          backgroundColor.r = backgroundLightness;
+          backgroundColor.g = backgroundLightness;
+          backgroundColor.b = backgroundLightness;
+          foregroundColor.r = foregroundLightness;
+          foregroundColor.g = foregroundLightness;
+          foregroundColor.b = foregroundLightness;
+        }
+
+        const char = " ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"[characterIndex];
+        const coloredChar = colors.bgRgb24(
+          colors.rgb24(char, foregroundColor),
+          backgroundColor,
+        );
+        outputString += coloredChar;
+      } else {
+        const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
+        const grayscaleValue = colorLightness(pixelColor);
+
+        if (grayscaleValue === undefined) {
+          throw `Error parsing pixel (${x}, ${y})`;
+        }
+
+        let characterIndex = Math.floor(
+          grayscaleValue / 255 * (characterMap.length - 0.5),
+        );
+        characterIndex = inverted
+          ? characterMap.length - 1 - characterIndex
+          : characterIndex;
+
+        outputString += color
+          ? colors.rgb24(characterMap[characterIndex], pixelColor)
+          : characterMap[characterIndex];
       }
-
-      const foregroundColor = {r: group1TotalColor.r/group1Count,g: group1TotalColor.g/group1Count,b: group1TotalColor.b/group1Count}
-      const backgroundColor = {r: group2TotalColor.r/group2Count,g: group2TotalColor.g/group2Count,b: group2TotalColor.b/group1Count}
-
-      // console.log(characterIndex)
-      outputString += colors.bgRgb24(colors.rgb24(" ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"[characterIndex], foregroundColor), backgroundColor);
-      // if (y == resolution && x == resolution / 2) calculateGroups(values);
-
-      // const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
-      // const grayscaleValue = (pixelColor.r + pixelColor.g + pixelColor.b) / 3;
-
-      // if (grayscaleValue === undefined) {
-      //   throw `Error parsing pixel (${x}, ${y})`;
-      // }
-
-      // let characterIndex = Math.floor(
-      //   grayscaleValue / 255 * (characterMap.length - 0.5),
-      // );
-      // characterIndex = inverted
-      //   ? characterMap.length - 1 - characterIndex
-      //   : characterIndex;
-
-      // outputString += color
-      //   ? colors.rgb24("█", pixelColor)
-      //   : characterMap[characterIndex];
     }
     outputString += "\n";
   }
@@ -138,15 +161,14 @@ async function getImageString(settings: imageSettings): Promise<string> {
 }
 
 function calculateGroups(values: number[][]) {
-  const group1: any = [];
-  const group2: any = [];
+  const groups: any = [[], []];
   const allSortedNeighbors = values.map((color, idA) => {
     const neighbors = values.map((color, id) => {
       return { color, id };
     }).filter((v, idB) => idA !== idB).sort(
       (v1, v2) =>
         colorDistance(color, v1.color) - colorDistance(color, v2.color),
-    )
+    );
     return {
       id: idA,
       neighbors,
@@ -161,12 +183,12 @@ function calculateGroups(values: number[][]) {
         if (c1.id !== c2.id && !c2.added) {
           //both each others' closest neighbor
           if (c1.neighbors[0].id === c2.id && c2.neighbors[0].id === c1.id) {
-            if (group1.length === 0) {
-              group1.push(c1);
-              group1.push(c2);
+            if (groups[0].length === 0) {
+              groups[0].push(c1);
+              groups[0].push(c2);
             } else {
-              group2.push(c1);
-              group2.push(c2);
+              groups[1].push(c1);
+              groups[1].push(c2);
             }
             c1.added = true;
             c2.added = true;
@@ -178,32 +200,32 @@ function calculateGroups(values: number[][]) {
 
   const remainingColors = allSortedNeighbors.filter((v) => !v.added);
   if (remainingColors.length > 0) {
-    const group1Average = {
-      r: (group1[0].color.r + group1[1].color.r) / 2,
-      g: (group1[0].color.g + group1[1].color.g) / 2,
-      b: (group1[0].color.b + group1[1].color.b) / 2,
-      a: (group1[0].color.a + group1[1].color.a) / 2,
+    const group0Average = {
+      r: (groups[0][0].color.r + groups[0][1].color.r) / 2,
+      g: (groups[0][0].color.g + groups[0][1].color.g) / 2,
+      b: (groups[0][0].color.b + groups[0][1].color.b) / 2,
+      a: (groups[0][0].color.a + groups[0][1].color.a) / 2,
     };
     if (
-      colorDistance(remainingColors[0], group1Average) <
-        colorDistance(remainingColors[1], group1Average)
+      colorDistance(remainingColors[0], group0Average) <
+        colorDistance(remainingColors[1], group0Average)
     ) {
-      group1.push(remainingColors[0]);
-      group2.push(remainingColors[1]);
+      groups[0].push(remainingColors[0]);
+      groups[1].push(remainingColors[1]);
     } else {
-      group1.push(remainingColors[1]);
-      group2.push(remainingColors[0]);
+      groups[0].push(remainingColors[1]);
+      groups[1].push(remainingColors[0]);
     }
   }
 
   return [
-    ...group1.map((v: any) => {
+    ...groups[0].map((v: any) => {
+      return { ...v, group: 0 };
+    }),
+    ...groups[1].map((v: any) => {
       return { ...v, group: 1 };
     }),
-    ...group2.map((v: any) => {
-      return { ...v, group: 2 };
-    }),
-  ].sort((v1, v2) => v1.id-v2.id);
+  ].sort((v1, v2) => v1.id - v2.id);
 }
 
 /** Outputs the image to the console. */
@@ -300,7 +322,9 @@ function colorDistance(color1: any, color2: any) {
     (color1.b - color2.b) ** 2) ** 0.5;
 }
 
+function colorLightness(color:any){
+  return (color.r + color.g + color.b)/3;
+}
+
 export { getImageString, printImageString };
 export type { imageSettings };
-
-//" ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"
