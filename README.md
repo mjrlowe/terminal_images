@@ -140,6 +140,8 @@ For more example outputs, have a look at the images folder.
 
 Contributions are welcome! Just pick something to do (the todo list above is a good starting point) and let me know you want to work on it by opening an issue or commenting on a relevant existing issue.
 
+If you think you have found a bug, please open an issue (after checking for similar issues).
+
 ## License
 
-**terminal_images** is under the open source MIT license. See the LICENSE file for legal words. 
+**terminal_images** is under the open source MIT license. See the LICENSE file for legal words.
