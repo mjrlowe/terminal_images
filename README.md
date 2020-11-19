@@ -124,10 +124,11 @@ For more example outputs, have a look at the images folder.
 - [X] Finish the documentation in README.md
 - [X] Add jsdoc documentation in the code
 - [X] Add support for unicode characters
+- [X] Add high(er) resolution output mode
 - [ ] Add some tests
 - [ ] Correctly handle square characters such as emojis
 - [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters (unless they aren't modifying anything and are visible)
-- [ ] Way to get higher resolution outputs for color mode?
+- [ ] Deal with transparency better (especially for high-res mode)
 - [ ] Option for width as a percentage of terminal screen
 - [ ] Detect whether terminal theme is light or dark automatically?
 - [ ] Better error handling (e.g. 404 when fetching image)
