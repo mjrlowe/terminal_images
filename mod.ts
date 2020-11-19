@@ -13,6 +13,13 @@ interface imageSettings {
   color?: boolean;
 }
 
+interface rgb {
+  r: number,
+  g: number,
+  b: number,
+  a?: number
+}
+
 const MIN_AUTO_WIDTH = 12;
 
 //["█", "▓", "▒", "░", " "]
@@ -91,6 +98,10 @@ async function getImageString(settings: imageSettings): Promise<string> {
         let group1TotalColor = { r: 0, g: 0, b: 0 };
         let group0Count = 0;
         let group1Count = 0;
+
+
+        const switchColors = organisedValues[2].group === 1 && organisedValues[3].group === 1;
+
         for (let value of organisedValues) {
           if (value.group === 0) {
             group0TotalColor.r += value.color.r;
@@ -103,7 +114,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
             group1TotalColor.b += value.color.b;
             group1Count++;
           }
-          characterIndex += 2 ** value.id * value.group;
+          characterIndex += 2 ** value.id * (switchColors ? 1-value.group : value.group);
         }
 
         const backgroundColor = {
@@ -129,10 +140,11 @@ async function getImageString(settings: imageSettings): Promise<string> {
         }
 
         const char = " ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"[characterIndex];
-        const coloredChar = colors.bgRgb24(
+        let coloredChar = colors.bgRgb24(
           colors.rgb24(char, foregroundColor),
           backgroundColor,
         );
+        if(switchColors) coloredChar = colors.inverse(coloredChar);
         outputString += coloredChar;
       } else {
         const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
@@ -160,7 +172,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
   return outputString;
 }
 
-function calculateGroups(values: number[][]) {
+function calculateGroups(values: rgb[]) {
   const groups: any = [[], []];
   const allSortedNeighbors = values.map((color, idA) => {
     const neighbors = values.map((color, id) => {
@@ -207,8 +219,8 @@ function calculateGroups(values: number[][]) {
       a: (groups[0][0].color.a + groups[0][1].color.a) / 2,
     };
     if (
-      colorDistance(remainingColors[0], group0Average) <
-        colorDistance(remainingColors[1], group0Average)
+      colorDistance(remainingColors[0].color, group0Average) <
+        colorDistance(remainingColors[1].color, group0Average)
     ) {
       groups[0].push(remainingColors[0]);
       groups[1].push(remainingColors[1]);
@@ -316,13 +328,13 @@ function getFileType(raw: Uint8Array): string {
   return "unknown";
 }
 
-function colorDistance(color1: any, color2: any) {
+function colorDistance(color1: rgb, color2: rgb) {
   //neive pythagoras's theorem for now
   return ((color1.r - color2.r) ** 2 + (color1.g - color2.g) ** 2 +
     (color1.b - color2.b) ** 2) ** 0.5;
 }
 
-function colorLightness(color:any){
+function colorLightness(color:rgb){
   return (color.r + color.g + color.b)/3;
 }
 
