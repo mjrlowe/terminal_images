@@ -86,17 +86,17 @@ _Because the size of the image automatically adapts to the size of your console,
 
 ## Character map?
 
-The "character map" is the characters that are used to display the image (when `color` is `false`).
+The "character map" is the characters that are used to display the image. _If no character map is specified, it will default to high(er) resolution mode--see the module usage example above._
 
 The characters at the beginning of the character map should be the darkest and the ones at the end be the lightest. You can switch this around by using the `inverted` flag/property.
 
-By default, the character map is set to `"█▓▒░ "`, but you can override this with any string you want. If you are using the module, you can set the character map to an array of strings, where each element will be used as a pixel color (rather than each character of the string).
+If you are using the module, you can set the character map to an array of strings, where each element will be used as a pixel color (rather than each character of the string).
 
 ### Some tips for using character maps:
 
 * Simple images with recognisable shapes and high contrast work the best. (Although if you aren't aiming for functionality, go wild!)
 * Normally you will want to invert the character map if your terminal is in a dark theme.
-* You can generate ASCII art by using character maps such as `"@#?)l+-. "`.
+* You can generate ASCII art by using character maps such as `"@#?)l+-. "` and blocky images using character maps like `█▓▒░ `.
 * Make sure you have escaped any characters you need to with a backslash (`\`).
 * You don't have to sort your characters from darksest to lightest or vice versa. Play around with what works for specfic images, and see if you can create any interesting effects.
 * Padding your character maps can be useful when brightness is not evenly distributed. For example, if your image has mostly dark tones, then your character map might have some extra spaces on the end, so that it is easier to distinguish between darker colors than lighter ones.
