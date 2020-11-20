@@ -22,7 +22,6 @@ interface rgb {
 
 const MIN_AUTO_WIDTH = 12;
 
-//["█", "▓", "▒", "░", " "]
 /** Returns a promise which resolves to a string version of the image that can outputted to the console. */
 async function getImageString(settings: imageSettings): Promise<string> {
   const path = settings.path;
@@ -54,6 +53,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   const decodedImage = decodeImage(raw, imageFileType);
 
+  //currently requires --unstable
   const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
   const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
 
@@ -99,7 +99,15 @@ async function getImageString(settings: imageSettings): Promise<string> {
         let group0Count = 0;
         let group1Count = 0;
 
-
+        /*
+        Some terminals (e.g. the one in VSCode) leave a gap beneath the characters. 
+        (Although most don't.) As a result, the background should be the same as 
+        color at the bottom of the cell, so there isn't a sudden change in color
+        at the bottom of each character.
+        
+        By default, group 1 is the foreground and group 0  is the background,
+        but if the bottom of the cell is all group 1, this should be switched.
+        */
         const switchColors = organisedValues[2].group === 1 && organisedValues[3].group === 1;
 
         for (let value of organisedValues) {
@@ -172,6 +180,13 @@ async function getImageString(settings: imageSettings): Promise<string> {
   return outputString;
 }
 
+/* 
+This function splits the four colors of a cell into two groups, 
+which are used to decide a background and foreground color,
+and choose which character to use to display the cell.
+The algorithm used below tries to make the two groups
+have similar colors within the group.
+*/
 function calculateGroups(values: rgb[]) {
   const groups: any = [[], []];
   const allSortedNeighbors = values.map((color, idA) => {
