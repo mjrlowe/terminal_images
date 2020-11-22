@@ -47,9 +47,9 @@ async function getImageString(settings: imageSettings): Promise<string> {
       raw = await Deno.readFile(path);
     }
 
-  }else if(typeof settings.path !== "undefined"){
+  }else if(typeof settings.raw !== "undefined"){
     raw = settings.raw;
-  }else{
+  } else{
     throw new Error("No file path or raw data specified.")
   }
 
