@@ -1,4 +1,4 @@
-import { colors, decodeJpeg, decodePng } from "./deps.ts";
+import { colors, decodeJpeg, decodePng, stringWidth } from "./deps.ts";
 
 interface imageSettings {
   /** The local file path or URL of the image */
@@ -71,7 +71,8 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   let outputString = "";
   for (let y = resolution; y < imagePixelHeight-resolution; y += resolution * 2) {
-    for (let x: number = resolution / 2; x < imagePixelWidth-resolution / 2; x += resolution) {
+    for (let x: number = resolution / 2; x < imagePixelWidth-resolution / 2; x += 0) {
+      let char:string;
       if (characterMap === undefined) {
         let values = [
           decodedImage.getPixel(
@@ -147,13 +148,12 @@ async function getImageString(settings: imageSettings): Promise<string> {
           foregroundColor.b = foregroundLightness;
         }
 
-        const char = " ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"[characterIndex];
-        let coloredChar = colors.bgRgb24(
+        char = " ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"[characterIndex];
+        char = colors.bgRgb24(
           colors.rgb24(char, foregroundColor),
           backgroundColor,
         );
-        if(switchColors) coloredChar = colors.inverse(coloredChar);
-        outputString += coloredChar;
+        if(switchColors) char = colors.inverse(char);
       } else {
         const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
         const grayscaleValue = colorLightness(pixelColor);
@@ -169,10 +169,12 @@ async function getImageString(settings: imageSettings): Promise<string> {
           ? characterMap.length - 1 - characterIndex
           : characterIndex;
 
-        outputString += color
-          ? colors.rgb24(characterMap[characterIndex], pixelColor)
-          : characterMap[characterIndex];
+        char = color
+        ? colors.rgb24(characterMap[characterIndex], pixelColor)
+        : characterMap[characterIndex];
       }
+      outputString += char;
+      x += resolution *stringWidth(char);
     }
     outputString += "\n";
   }

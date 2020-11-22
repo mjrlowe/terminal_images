@@ -7,7 +7,7 @@ Currently only PNG and JPG images are supported.
 To install the CLI tool, run the following from the command line:
 
 ```shell
-deno install --allow-read --allow-net --unstable https://x.nest.land/terminal_images@2.0.0/cli.ts
+deno install --allow-read --allow-net --unstable --force https://x.nest.land/terminal_images@2.0.0/cli.ts
 ```
 
 Then run
@@ -123,12 +123,12 @@ For more example outputs, have a look at the images folder.
 * [X] Add support for using images loaded from the web (rather than just locally)
 * [X] Auto-detect file format (no need to rely on the file extension)
 * [X] Allow the user to input an array of strings for the character map [added, but user can't do this when using the cli]
-* [ ] Finish the documentation in README.md
+* [X] Finish the documentation in README.md
 * [X] Add jsdoc documentation in the code
 * [X] Add support for unicode characters
 * [X] Add high(er) resolution output mode
+* [X] Correctly handle characters such as emojis that have a width that isn't 1
 * [ ] Add some tests
-* [ ] Correctly handle square characters such as emojis
 * [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters (unless they aren't modifying anything and are visible)
 * [ ] Deal with transparency better (especially for high-res mode)
 * [ ] Option for width as a percentage of terminal screen
