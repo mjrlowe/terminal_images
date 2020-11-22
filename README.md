@@ -77,6 +77,7 @@ This should output something like this:
 | Property | Type | Description | Default Value | CLI Flag |
 |-|-|-|-|-|
 | `path` | string | The path or URL of the input image. | No default | `--file` or `-f` |
+| `raw` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
 | `color` | boolean | Whether the output should be in color. | `false` | `--color` or `-c` |
 | `characterMap` | string \| string[] | See the section on character maps for more information. | By default a character map isn't used, and high-res mode is used instead. | `--character-map` or `-m` |
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |

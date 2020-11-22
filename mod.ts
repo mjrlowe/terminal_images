@@ -2,7 +2,9 @@ import { colors, decodeJpeg, decodePng, stringWidth } from "./deps.ts";
 
 interface imageSettings {
   /** The local file path or URL of the image */
-  path: string;
+  path?: string;
+  /** The raw data of a PNG or JPG image */
+  raw?: Uint8Array;
   /** The character map to use when outputting the image */
   characterMap?: string | string[];
   /** The number of characters wide the output image is */
@@ -24,7 +26,6 @@ const MIN_AUTO_WIDTH = 12;
 
 /** Returns a promise which resolves to a string version of the image that can outputted to the console. */
 async function getImageString(settings: imageSettings): Promise<string> {
-  const path = settings.path;
   const characterMap = settings.characterMap
     ? [...settings.characterMap]
     : undefined;
@@ -32,23 +33,37 @@ async function getImageString(settings: imageSettings): Promise<string> {
   const color = settings.color ?? false;
 
   let raw;
+  if(typeof settings.path !== "undefined"){
 
-  //external file on the internet (requires --allow-net)
-  if (path.startsWith("https://") || path.startsWith("http://")) {
-    const response = await fetch(path);
-    raw = new Uint8Array(await response.arrayBuffer());
+    const path = settings.path;
+
+    //external file on the internet (requires --allow-net)
+    if (path.startsWith("https://") || path.startsWith("http://")) {
+      const response = await fetch(path);
+      raw = new Uint8Array(await response.arrayBuffer());
 
     //local file (requires --allow-read)
-  } else {
-    raw = await Deno.readFile(path);
+    } else {
+      raw = await Deno.readFile(path);
+    }
+
+  }else if(typeof settings.path !== "undefined"){
+    raw = settings.raw;
+  }else{
+    throw new Error("No file path or raw data specified.")
   }
 
   const imageFileType = getFileType(raw);
   if (imageFileType === "unknown") {
-    const fileExtension = path.substr(
-      path.lastIndexOf(".") + 1,
-    ).toLowerCase();
-    throw `Image file type not supported. (${fileExtension})`;
+    if(settings.path){
+      const fileExtension = settings.path.substr(
+        settings.path.lastIndexOf(".") + 1,
+      ).toLowerCase();
+      throw new Error(`Image file type not supported. (${fileExtension})`);
+    }else{
+      throw new Error(`Image file type not supported.`)
+    }
+    
   }
 
   const decodedImage = decodeImage(raw, imageFileType);
