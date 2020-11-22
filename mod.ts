@@ -4,7 +4,9 @@ interface imageSettings {
   /** The local file path or URL of the image */
   path?: string;
   /** The raw data of a PNG or JPG image */
-  raw?: Uint8Array;
+  rawFile?: Uint8Array;
+  /** The raw data for the image: the rgb(a) array as well as the height and width */
+  rawPixels?: {data: Uint8Array, width: number, height: number};
   /** The character map to use when outputting the image */
   characterMap?: string | string[];
   /** The number of characters wide the output image is */
@@ -47,13 +49,16 @@ async function getImageString(settings: imageSettings): Promise<string> {
       raw = await Deno.readFile(path);
     }
 
-  }else if(typeof settings.raw !== "undefined"){
-    raw = settings.raw;
+  }else if(typeof settings.rawFile !== "undefined"){
+    raw = settings.rawFile;
+  }else if(typeof settings.rawPixels !== "undefined"){
+    raw = settings.rawPixels;
   } else{
     throw new Error("No file path or raw data specified.")
   }
 
-  const imageFileType = getFileType(raw);
+  //@ts-ignore
+  let imageFileType = typeof settings.rawPixels !== "undefined" ? "raw" : getFileType(raw);
   if (imageFileType === "unknown") {
     if(settings.path){
       const fileExtension = settings.path.substr(
@@ -285,15 +290,21 @@ async function printImageString(settings: imageSettings): Promise<void> {
   console.log(await getImageString(settings));
 }
 
-function decodeImage(raw: Uint8Array, format: string) {
+function decodeImage(raw: Uint8Array | {data: Uint8Array, width: number, height: number}, format: string) {
   let decodedImage;
   switch (format) {
     case "jpg":
+      //@ts-ignore
       decodedImage = decodeJpeg(raw);
       break;
 
     case "png":
+      //@ts-ignore
       decodedImage = decodePng(raw);
+      break;
+    
+    case "raw":
+      decodedImage = raw;
       break;
 
     default:

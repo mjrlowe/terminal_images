@@ -77,7 +77,8 @@ This should output something like this:
 | Property | Type | Description | Default Value | CLI Flag |
 |-|-|-|-|-|
 | `path` | string | The path or URL of the input image. | No default | `--file` or `-f` |
-| `raw` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
+| `rawFile` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
+| `rawPixels` | {data: UintArray, width: number, height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
 | `color` | boolean | Whether the output should be in color. | `false` | `--color` or `-c` |
 | `characterMap` | string \| string[] | See the section on character maps for more information. | By default a character map isn't used, and high-res mode is used instead. | `--character-map` or `-m` |
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
@@ -111,7 +112,7 @@ If you are using the module, you can set the character map to an array of string
 | `--allow-net` | _ | To fetch images from the web |
 | `--allow-read` | _ | To use images stored locally |
 
-Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in the CLI tool). When using `raw`, only the `--unstable` flag is needed.
+Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in the CLI tool). When using `rawFile` or `rawPixels`, only the `--unstable` flag is needed.
 
 ## Examples
 
