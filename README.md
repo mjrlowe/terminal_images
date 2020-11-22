@@ -113,6 +113,7 @@ If you are using the module, you can set the character map to an array of string
 ## Examples
 
 ![Inverted image loaded from unsplash](./images/unsplash_photo_with_inverted_character_map.png)
+![Colored high-res image loaded from unsplash](./images/small_high_res_colored_image.png)
 
 For more example outputs, have a look at the images folder.
 
@@ -128,7 +129,7 @@ For more example outputs, have a look at the images folder.
 * [X] Add support for unicode characters
 * [X] Add high(er) resolution output mode
 * [X] Correctly handle characters such as emojis that have a width that isn't 1
-* [ ] Add some tests
+* [ ] Add some tests (this might be diffult as detecting the terminal size won't work)
 * [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters (unless they aren't modifying anything and are visible)
 * [ ] Deal with transparency better (especially for high-res mode)
 * [ ] Option for width as a percentage of terminal screen
