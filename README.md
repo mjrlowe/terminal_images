@@ -111,6 +111,8 @@ If you are using the module, you can set the character map to an array of string
 | `--allow-net` | _ | To fetch images from the web |
 | `--allow-read` | _ | To use images stored locally |
 
+Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in the CLI tool). When using `raw`, only the `--unstable` flag is needed.
+
 ## Examples
 
 ![Inverted image loaded from unsplash](./images/unsplash_photo_with_inverted_character_map.png)
