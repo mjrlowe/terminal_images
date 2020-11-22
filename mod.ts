@@ -14,10 +14,10 @@ interface imageSettings {
 }
 
 interface rgb {
-  r: number,
-  g: number,
-  b: number,
-  a?: number
+  r: number;
+  g: number;
+  b: number;
+  a?: number;
 }
 
 const MIN_AUTO_WIDTH = 12;
@@ -38,7 +38,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
     const response = await fetch(path);
     raw = new Uint8Array(await response.arrayBuffer());
 
-  //local file (requires --allow-read)
+    //local file (requires --allow-read)
   } else {
     raw = await Deno.readFile(path);
   }
@@ -70,9 +70,15 @@ async function getImageString(settings: imageSettings): Promise<string> {
   }
 
   let outputString = "";
-  for (let y = resolution; y < imagePixelHeight-resolution; y += resolution * 2) {
-    for (let x: number = resolution / 2; x < imagePixelWidth-resolution / 2; x += 0) {
-      let char:string;
+  for (
+    let y = resolution; y < imagePixelHeight - resolution; y += resolution * 2
+  ) {
+    for (
+      let x: number = resolution / 2;
+      x < imagePixelWidth - resolution / 2;
+      x += 0
+    ) {
+      let char: string;
       if (characterMap === undefined) {
         let values = [
           decodedImage.getPixel(
@@ -109,7 +115,8 @@ async function getImageString(settings: imageSettings): Promise<string> {
         By default, group 1 is the foreground and group 0  is the background,
         but if the bottom of the cell is all group 1, this should be switched.
         */
-        const switchColors = organisedValues[2].group === 1 && organisedValues[3].group === 1;
+        const switchColors = organisedValues[2].group === 1 &&
+          organisedValues[3].group === 1;
 
         for (let value of organisedValues) {
           if (value.group === 0) {
@@ -123,7 +130,8 @@ async function getImageString(settings: imageSettings): Promise<string> {
             group1TotalColor.b += value.color.b;
             group1Count++;
           }
-          characterIndex += 2 ** value.id * (switchColors ? 1-value.group : value.group);
+          characterIndex += 2 ** value.id *
+            (switchColors ? 1 - value.group : value.group);
         }
 
         const backgroundColor = {
@@ -137,7 +145,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
           b: group1TotalColor.b / group1Count,
         };
 
-        if(!color){
+        if (!color) {
           const backgroundLightness = colorLightness(backgroundColor);
           const foregroundLightness = colorLightness(foregroundColor);
           backgroundColor.r = backgroundLightness;
@@ -153,7 +161,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
           colors.rgb24(char, foregroundColor),
           backgroundColor,
         );
-        if(switchColors) char = colors.inverse(char);
+        if (switchColors) char = colors.inverse(char);
       } else {
         const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y));
         const grayscaleValue = colorLightness(pixelColor);
@@ -170,11 +178,11 @@ async function getImageString(settings: imageSettings): Promise<string> {
           : characterIndex;
 
         char = color
-        ? colors.rgb24(characterMap[characterIndex], pixelColor)
-        : characterMap[characterIndex];
+          ? colors.rgb24(characterMap[characterIndex], pixelColor)
+          : characterMap[characterIndex];
       }
       outputString += char;
-      x += resolution *stringWidth(char);
+      x += resolution * stringWidth(char);
     }
     outputString += "\n";
   }
@@ -351,8 +359,8 @@ function colorDistance(color1: rgb, color2: rgb) {
     (color1.b - color2.b) ** 2) ** 0.5;
 }
 
-function colorLightness(color:rgb){
-  return (color.r + color.g + color.b)/3;
+function colorLightness(color: rgb) {
+  return (color.r + color.g + color.b) / 3;
 }
 
 export { getImageString, printImageString };
