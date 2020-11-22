@@ -6,7 +6,7 @@ interface imageSettings {
   /** The raw data of a PNG or JPG image */
   rawFile?: Uint8Array;
   /** The raw data for the image: the rgb(a) array as well as the height and width */
-  rawPixels?: {data: Uint8Array, width: number, height: number};
+  rawPixels?: { data: Uint8Array; width: number; height: number };
   /** The character map to use when outputting the image */
   characterMap?: string | string[];
   /** The number of characters wide the output image is */
@@ -35,8 +35,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
   const color = settings.color ?? false;
 
   let raw;
-  if(typeof settings.path !== "undefined"){
-
+  if (typeof settings.path !== "undefined") {
     const path = settings.path;
 
     //external file on the internet (requires --allow-net)
@@ -44,31 +43,31 @@ async function getImageString(settings: imageSettings): Promise<string> {
       const response = await fetch(path);
       raw = new Uint8Array(await response.arrayBuffer());
 
-    //local file (requires --allow-read)
+      //local file (requires --allow-read)
     } else {
       raw = await Deno.readFile(path);
     }
-
-  }else if(typeof settings.rawFile !== "undefined"){
+  } else if (typeof settings.rawFile !== "undefined") {
     raw = settings.rawFile;
-  }else if(typeof settings.rawPixels !== "undefined"){
+  } else if (typeof settings.rawPixels !== "undefined") {
     raw = settings.rawPixels;
-  } else{
-    throw new Error("No file path or raw data specified.")
+  } else {
+    throw new Error("No file path or raw data specified.");
   }
 
   //@ts-ignore
-  let imageFileType = typeof settings.rawPixels !== "undefined" ? "raw" : getFileType(raw);
+  let imageFileType = typeof settings.rawPixels !== "undefined"
+    ? "raw"
+    : getFileType(raw);
   if (imageFileType === "unknown") {
-    if(settings.path){
+    if (settings.path) {
       const fileExtension = settings.path.substr(
         settings.path.lastIndexOf(".") + 1,
       ).toLowerCase();
       throw new Error(`Image file type not supported. (${fileExtension})`);
-    }else{
-      throw new Error(`Image file type not supported.`)
+    } else {
+      throw new Error(`Image file type not supported.`);
     }
-    
   }
 
   const decodedImage = decodeImage(raw, imageFileType);
@@ -91,7 +90,9 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   let outputString = "";
   for (
-    let y = resolution; y < imagePixelHeight - resolution; y += resolution * 2
+    let y = resolution;
+    y < imagePixelHeight - resolution;
+    y += resolution * 2
   ) {
     for (
       let x: number = resolution / 2;
@@ -290,7 +291,10 @@ async function printImageString(settings: imageSettings): Promise<void> {
   console.log(await getImageString(settings));
 }
 
-function decodeImage(raw: Uint8Array | {data: Uint8Array, width: number, height: number}, format: string) {
+function decodeImage(
+  raw: Uint8Array | { data: Uint8Array; width: number; height: number },
+  format: string,
+) {
   let decodedImage;
   switch (format) {
     case "jpg":
@@ -302,7 +306,7 @@ function decodeImage(raw: Uint8Array | {data: Uint8Array, width: number, height:
       //@ts-ignore
       decodedImage = decodePng(raw);
       break;
-    
+
     case "raw":
       decodedImage = raw;
       break;
