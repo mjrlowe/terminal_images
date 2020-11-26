@@ -6,7 +6,7 @@ interface imageSettings {
   /** The raw data of a PNG or JPG image */
   rawFile?: Uint8Array;
   /** The raw data for the image: the rgb(a) array as well as the height and width */
-  rawPixels?: { data: Uint8Array; width: number; height: number };
+  rawPixels?: rawPixelData;
   /** The character map to use when outputting the image */
   characterMap?: string | string[];
   /** The number of characters wide the output image is */
@@ -15,6 +15,12 @@ interface imageSettings {
   inverted?: boolean;
   /** Whether the output image should be in color */
   color?: boolean;
+}
+
+interface rawPixelData{
+  width: number;
+  height: number;
+  data: Uint8Array;
 }
 
 interface rgb {
@@ -35,6 +41,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
   const color = settings.color ?? false;
 
   let raw;
+  let fileFormat;
   if (typeof settings.path !== "undefined") {
     const path = settings.path;
 
@@ -47,19 +54,18 @@ async function getImageString(settings: imageSettings): Promise<string> {
     } else {
       raw = await Deno.readFile(path);
     }
+    fileFormat = getFileType(raw);
   } else if (typeof settings.rawFile !== "undefined") {
     raw = settings.rawFile;
+    fileFormat = getFileType(raw);
   } else if (typeof settings.rawPixels !== "undefined") {
     raw = settings.rawPixels;
+    fileFormat = "raw";
   } else {
     throw new Error("No file path or raw data specified.");
   }
 
-  //@ts-ignore
-  let imageFileType = typeof settings.rawPixels !== "undefined"
-    ? "raw"
-    : getFileType(raw);
-  if (imageFileType === "unknown") {
+  if (fileFormat === "unknown") {
     if (settings.path) {
       const fileExtension = settings.path.substr(
         settings.path.lastIndexOf(".") + 1,
@@ -70,7 +76,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
     }
   }
 
-  const decodedImage = decodeImage(raw, imageFileType);
+  const decodedImage = decodeImage(raw, fileFormat);
 
   //currently requires --unstable
   const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
@@ -292,29 +298,20 @@ async function printImageString(settings: imageSettings): Promise<void> {
 }
 
 function decodeImage(
-  raw: Uint8Array | { data: Uint8Array; width: number; height: number },
+  raw: Uint8Array | rawPixelData,
   format: string,
 ) {
   let decodedImage;
-  switch (format) {
-    case "jpg":
-      //@ts-ignore
-      decodedImage = decodeJpeg(raw);
-      break;
-
-    case "png":
-      //@ts-ignore
-      decodedImage = decodePng(raw);
-      break;
-
-    case "raw":
-      decodedImage = raw;
-      break;
-
-    default:
-      throw `Image format ${format} not supported. Also, this error message should be unreachable. :/`;
+  if(isRawPixelData(raw) || format === "raw"){
+    decodedImage = raw;
+  }else if(format ==="png"){
+    decodedImage = decodePng(raw);
+  }else if(format ==="jpg"){
+    decodedImage = decodeJpeg(raw);
+  }else{
+    throw new Error(`Image format ${format} not supported. Also, this error message should be unreachable. :/`);
   }
-
+  
   decodedImage.getPixel = function (x: number, y: number) {
     const index = x + (y * this.width);
     let pixelData;
@@ -384,13 +381,18 @@ function getFileType(raw: Uint8Array): string {
 }
 
 function colorDistance(color1: rgb, color2: rgb) {
-  //neive pythagoras's theorem for now
+  //calculate the visual distance between colors using pythagoras's theorem
+  //not totally accurate but it's fast and simple
   return ((color1.r - color2.r) ** 2 + (color1.g - color2.g) ** 2 +
     (color1.b - color2.b) ** 2) ** 0.5;
 }
 
 function colorLightness(color: rgb) {
   return (color.r + color.g + color.b) / 3;
+}
+
+function isRawPixelData(x:any): x is rawPixelData{
+  return typeof x.data !== "undefined";
 }
 
 export { getImageString, printImageString };
