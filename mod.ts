@@ -17,7 +17,7 @@ interface imageSettings {
   color?: boolean;
 }
 
-interface rawPixelData{
+interface rawPixelData {
   width: number;
   height: number;
   data: Uint8Array;
@@ -45,13 +45,12 @@ async function getImageString(settings: imageSettings): Promise<string> {
   if (typeof settings.path !== "undefined") {
     const path = settings.path;
 
-    //external file on the internet (requires --allow-net)
     if (path.startsWith("https://") || path.startsWith("http://")) {
+      //external file on the internet (requires --allow-net)
       const response = await fetch(path);
       raw = new Uint8Array(await response.arrayBuffer());
-
-      //local file (requires --allow-read)
     } else {
+      //local file (requires --allow-read)
       raw = await Deno.readFile(path);
     }
     fileFormat = getFileType(raw);
@@ -302,16 +301,18 @@ function decodeImage(
   format: string,
 ) {
   let decodedImage;
-  if(isRawPixelData(raw) || format === "raw"){
+  if (isRawPixelData(raw) || format === "raw") {
     decodedImage = raw;
-  }else if(format ==="png"){
+  } else if (format === "png") {
     decodedImage = decodePng(raw);
-  }else if(format ==="jpg"){
+  } else if (format === "jpg") {
     decodedImage = decodeJpeg(raw);
-  }else{
-    throw new Error(`Image format ${format} not supported. Also, this error message should be unreachable. :/`);
+  } else {
+    throw new Error(
+      `Image format ${format} not supported. Also, this error message should be unreachable. :/`,
+    );
   }
-  
+
   decodedImage.getPixel = function (x: number, y: number) {
     const index = x + (y * this.width);
     let pixelData;
@@ -391,7 +392,7 @@ function colorLightness(color: rgb) {
   return (color.r + color.g + color.b) / 3;
 }
 
-function isRawPixelData(x:any): x is rawPixelData{
+function isRawPixelData(x: any): x is rawPixelData {
   return typeof x.data !== "undefined";
 }
 
