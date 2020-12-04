@@ -84,44 +84,45 @@ async function getImageString(settings: imageSettings): Promise<string> {
   const imagePixelWidth = decodedImage.width;
   const imagePixelHeight = decodedImage.height;
 
-  let resolution;
+
+  let characterWidth;
   if (settings.width) {
-    resolution = Math.ceil(imagePixelWidth / settings.width);
+    characterWidth = Math.ceil(imagePixelWidth / settings.width);
   } else {
-    resolution = (terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2)
+    characterWidth = (terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2)
       ? imagePixelWidth / terminalWidth
       : imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
   }
 
   let outputString = "";
   for (
-    let y = resolution;
-    y < imagePixelHeight - resolution;
-    y += resolution * 2
+    let y = characterWidth;
+    y < imagePixelHeight - characterWidth;
+    y += characterWidth * 2
   ) {
     for (
-      let x: number = resolution / 2;
-      x < imagePixelWidth - resolution / 2;
+      let x: number = characterWidth / 2;
+      x < imagePixelWidth - characterWidth / 2;
       x += 0
     ) {
       let char: string;
       if (characterMap === undefined) {
         let values = [
           decodedImage.getPixel(
-            Math.floor(x - resolution / 4),
-            Math.floor(y - resolution / 2),
+            Math.floor(x - characterWidth / 4),
+            Math.floor(y - characterWidth / 2),
           ),
           decodedImage.getPixel(
-            Math.floor(x + resolution / 4),
-            Math.floor(y - resolution / 2),
+            Math.floor(x + characterWidth / 4),
+            Math.floor(y - characterWidth / 2),
           ),
           decodedImage.getPixel(
-            Math.floor(x - resolution / 4),
-            Math.floor(y + resolution / 2),
+            Math.floor(x - characterWidth / 4),
+            Math.floor(y + characterWidth / 2),
           ),
           decodedImage.getPixel(
-            Math.floor(x + resolution / 4),
-            Math.floor(y + resolution / 2),
+            Math.floor(x + characterWidth / 4),
+            Math.floor(y + characterWidth / 2),
           ),
         ];
 
