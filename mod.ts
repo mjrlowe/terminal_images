@@ -77,21 +77,21 @@ async function getImageString(settings: imageSettings): Promise<string> {
 
   const decodedImage = decodeImage(raw, fileFormat);
 
-  //currently requires --unstable
-  const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
-  const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
-
   const imagePixelWidth = decodedImage.width;
   const imagePixelHeight = decodedImage.height;
-
 
   let characterWidth;
   if (settings.width) {
     characterWidth = Math.ceil(imagePixelWidth / settings.width);
   } else {
-    characterWidth = (terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2)
-      ? imagePixelWidth / terminalWidth
-      : imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
+    //currently requires --unstable
+    const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
+    const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
+
+    characterWidth =
+      (terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2)
+        ? imagePixelWidth / terminalWidth
+        : imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
   }
 
   let outputString = "";
@@ -209,7 +209,7 @@ async function getImageString(settings: imageSettings): Promise<string> {
           : characterMap[characterIndex];
       }
       outputString += char;
-      x += resolution * stringWidth(char);
+      x += characterWidth * stringWidth(char);
     }
     outputString += "\n";
   }
