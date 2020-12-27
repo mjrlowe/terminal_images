@@ -1,5 +1,9 @@
 import { colors, stringWidth, tty } from "./deps.ts";
-import {decodeImageFromPath, decodeImageFromRawFile, decodeImageFromRawPixels} from "./decode.ts";
+import {
+  decodeImageFromPath,
+  decodeImageFromRawFile,
+  decodeImageFromRawPixels,
+} from "./decode.ts";
 interface imageSettings {
   /** The local file path or URL of the image */
   path?: string;
@@ -38,24 +42,26 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
     ? [...settings.characterMap]
     : undefined;
   const inverted = settings.inverted ?? false;
-  const color = settings.color ?? false;
+  const color = settings.color ?? true;
 
   let decodedImage;
   if (typeof settings.path !== "undefined") {
     decodedImage = await decodeImageFromPath(settings.path);
-  }else if(typeof settings.rawFile !== "undefined"){
+  } else if (typeof settings.rawFile !== "undefined") {
     decodedImage = await decodeImageFromRawFile(settings.rawFile);
   } else if (typeof settings.rawPixels !== "undefined") {
     decodedImage = await decodeImageFromRawPixels(settings.rawPixels);
-  }else{
+  } else {
     throw new Error("No file path or raw data specified.");
   }
 
   if (decodedImage.fileFormat === "unknown") {
-    throw new Error(`Image file type not recognised. Only PNG, JPG and GIF formats are supported.`);
+    throw new Error(
+      `Image file type not recognised. Only PNG, JPG and GIF formats are supported.`,
+    );
   }
 
-//  console.log(decodedImage)
+  //  console.log(decodedImage)
 
   const imagePixelWidth = decodedImage.width;
   const imagePixelHeight = decodedImage.height;
@@ -74,10 +80,9 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
         : imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
   }
 
-  let outputStrings:string[] = [];
+  let outputStrings: string[] = [];
 
-  for(let frameIndex = 0; frameIndex < decodedImage.numFrames; frameIndex++){
-
+  for (let frameIndex = 0; frameIndex < decodedImage.numFrames; frameIndex++) {
     let outputString = "";
     for (
       let y = characterWidth;
@@ -95,22 +100,22 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
             decodedImage.getPixel(
               Math.floor(x - characterWidth / 4),
               Math.floor(y - characterWidth / 2),
-              frameIndex
+              frameIndex,
             ),
             decodedImage.getPixel(
               Math.floor(x + characterWidth / 4),
               Math.floor(y - characterWidth / 2),
-              frameIndex
+              frameIndex,
             ),
             decodedImage.getPixel(
               Math.floor(x - characterWidth / 4),
               Math.floor(y + characterWidth / 2),
-              frameIndex
+              frameIndex,
             ),
             decodedImage.getPixel(
               Math.floor(x + characterWidth / 4),
               Math.floor(y + characterWidth / 2),
-              frameIndex
+              frameIndex,
             ),
           ];
 
@@ -178,7 +183,11 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
           );
           if (switchColors) char = colors.inverse(char);
         } else {
-          const pixelColor = decodedImage.getPixel(Math.floor(x), Math.floor(y), frameIndex);
+          const pixelColor = decodedImage.getPixel(
+            Math.floor(x),
+            Math.floor(y),
+            frameIndex,
+          );
           const grayscaleValue = colorLightness(pixelColor);
 
           if (grayscaleValue === undefined) {
@@ -199,7 +208,7 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
         outputString += char;
         x += characterWidth * stringWidth(char);
       }
-      if(y < imagePixelHeight - characterWidth*3) outputString += "\n";
+      if (y < imagePixelHeight - characterWidth * 3) outputString += "\n";
     }
     outputStrings.push(outputString);
   }
@@ -284,8 +293,7 @@ function calculateGroups(values: rgb[]) {
 /** Outputs the image to the console. */
 async function printImage(settings: imageSettings): Promise<void> {
   const outputStrings = await getImageStrings(settings);
-  
-  
+
   const width = stringWidth(outputStrings[0].split("\n")[0]);
   const height = (outputStrings[0]?.match(/\n/g)?.length ?? 0) + 1;
   tty.hideCursorSync();
@@ -295,24 +303,21 @@ async function printImage(settings: imageSettings): Promise<void> {
       //tty.clearScreenSync();
       // tty.clearUpSync();
 
-      console.log(outputStrings[frameIndex])
-  
+      console.log(outputStrings[frameIndex]);
+
       //tty.goHomeSync();
       // tty.goToSync(0, 0)
-  
-     
+
       // for(let i = 0; i< 25; i++)
       // tty.clearLineSync();
       tty.goUpSync(height);
-  
-      if(frameIndex === outputStrings.length -1){
+
+      if (frameIndex === outputStrings.length - 1) {
         tty.goDownSync(height);
         tty.showCursor();
-        console.log(width, height)
+        console.log(width, height);
         // console.log(JSON.stringify(outputStrings[0]))
-
       }
-  
     }, frameIndex * 200);
     // console.log( getFrameData(i))
   }

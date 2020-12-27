@@ -29,9 +29,11 @@ if (typeof textImageSettings.path != "undefined") {
     textImageSettings.color =
       !(parsedArgs.color === "false" || !parsedArgs.color);
   }
-  if (parsedArgs.c !== undefined) {
-    textImageSettings.color = !(parsedArgs.c === "false" || !parsedArgs.c);
+  if (parsedArgs.n !== undefined) {
+    textImageSettings.color = !parsedArgs.n;
   }
+  console.log(parsedArgs);
+  // console.log("helloo")
 
   await printImage(textImageSettings);
 } else if (parsedArgs.V) {
@@ -55,8 +57,8 @@ IMAGE PRINTING OPTIONS
   The character map to use for the output image
 -i, --inverted
   Inverts the character map
--c, --color
-  Sets to output image to be in color
+-n, --no-color
+  Sets to output image to not be in color
 `);
 } else {
   console.error("Invalid command. Run --help for usage information.");
