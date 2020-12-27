@@ -1,4 +1,4 @@
-import { imageSettings, printImageString } from "./mod.ts";
+import { imageSettings, printImage } from "./mod.ts";
 import { colors, parse } from "./deps.ts";
 import version from "./version.ts";
 
@@ -33,7 +33,7 @@ if (typeof textImageSettings.path != "undefined") {
     textImageSettings.color = !(parsedArgs.c === "false" || !parsedArgs.c);
   }
 
-  await printImageString(textImageSettings);
+  await printImage(textImageSettings);
 } else if (parsedArgs.V) {
   console.log(`terminal_images ${version}`);
 } else if (parsedArgs.version) {
