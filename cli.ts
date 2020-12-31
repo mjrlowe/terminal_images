@@ -5,7 +5,7 @@ import version from "./version.ts";
 const parsedArgs = parse(Deno.args);
 
 const textImageSettings: imageSettings = {
-  path: parsedArgs.file ?? parsedArgs.f,
+  path: parsedArgs.file ?? parsedArgs.f ?? parsedArgs._?.[0],
 };
 
 if (typeof textImageSettings.path != "undefined") {
@@ -32,8 +32,6 @@ if (typeof textImageSettings.path != "undefined") {
   if (parsedArgs.n !== undefined) {
     textImageSettings.color = !parsedArgs.n;
   }
-  console.log(parsedArgs);
-  // console.log("helloo")
 
   await printImage(textImageSettings);
 } else if (parsedArgs.V) {
@@ -49,7 +47,7 @@ INFO OPTIONS
   Prints version information
 
 IMAGE PRINTING OPTIONS
--f, --file <path>
+<path> [OR -f, --file <path>] 
   The image URL/path of the input image (required)
 -w, --width <width>
   The number of characters wde the output image should be
