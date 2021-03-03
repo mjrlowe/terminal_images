@@ -1,11 +1,5 @@
 import { decodeJpeg, decodePng, GifReader } from "./deps.ts";
 
-interface rawPixelData {
-  width: number;
-  height: number;
-  data: Uint8Array;
-}
-
 export async function decodeImageFromPath(path: string) {
   let fileData;
   if (path.startsWith("https://") || path.startsWith("http://")) {
@@ -145,6 +139,7 @@ export function setAttributes(decodedImage: any) {
         r: frameData[index * 3],
         g: frameData[index * 3 + 1],
         b: frameData[index * 3 + 2],
+        a: 255
       };
       //grayscale
     } else {
@@ -152,6 +147,7 @@ export function setAttributes(decodedImage: any) {
         r: frameData[index],
         g: frameData[index],
         b: frameData[index],
+        a: 255
       };
     }
     return pixelData;

@@ -133,14 +133,16 @@ For more example outputs, have a look at the images folder.
 * [X] Add support for unicode characters
 * [X] Add high(er) resolution output mode
 * [X] Correctly handle characters such as emojis that have a width that isn't 1
-* [ ] Add some tests (this might be diffult as detecting the terminal size won't work)
+* [X] Add support for GIF images
+* [X] Deal with transparency better (especially for high-res mode)
+* [ ] Fix some images not displaying correct colors (incorrect black and white, not dispalying transparent)
+* [ ] Fix some images displaying at the incorrect size (too large) by default
+* [ ] Add some tests
 * [ ] Don't count modifier characters (e.g. emoji skin tones) as separate characters (unless they aren't modifying anything and are visible)
-* [ ] Deal with transparency better (especially for high-res mode)
 * [ ] Option for width as a percentage of terminal screen
 * [ ] Detect whether terminal theme is light or dark automatically?
 * [ ] Better error handling (e.g. 404 when fetching image)
 * [ ] Add support for webp images
-* [ ] Add support for GIF images
 * [ ] Add support for TIFF images
 
 ## Contributions

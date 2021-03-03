@@ -12,16 +12,16 @@ if (typeof textImageSettings.path != "undefined") {
   if (parsedArgs["character-map"]) {
     textImageSettings.characterMap = String(parsedArgs["character-map"]);
   }
-  if (parsedArgs.m) textImageSettings.characterMap = String(parsedArgs.m);
+  else if (parsedArgs.m) textImageSettings.characterMap = String(parsedArgs.m);
 
   if (parsedArgs.width) textImageSettings.width = parseInt(parsedArgs.width);
-  if (parsedArgs.w) textImageSettings.width = parseInt(parsedArgs.w);
+  else if (parsedArgs.w) textImageSettings.width = parseInt(parsedArgs.w);
 
   if (parsedArgs.inverted !== undefined) {
     textImageSettings.inverted =
       !(parsedArgs.inverted === "false" || !parsedArgs.inverted);
   }
-  if (parsedArgs.i !== undefined) {
+  else if (parsedArgs.i !== undefined) {
     textImageSettings.inverted = !(parsedArgs.i === "false" || !parsedArgs.i);
   }
 
@@ -29,9 +29,15 @@ if (typeof textImageSettings.path != "undefined") {
     textImageSettings.color =
       !(parsedArgs.color === "false" || !parsedArgs.color);
   }
-  if (parsedArgs.n !== undefined) {
+  else if (parsedArgs.n !== undefined) {
     textImageSettings.color = !parsedArgs.n;
   }
+
+  if (parsedArgs["animation-loops"]  !== undefined) textImageSettings.animationLoops = parseInt(parsedArgs["animation-loops"]);
+  else if (parsedArgs.l  !== undefined) textImageSettings.animationLoops = parseInt(parsedArgs.l);
+
+  if (parsedArgs["transparency-threshold"] !== undefined) textImageSettings.transparencyThreshold = parseInt(parsedArgs["transparency-threshold"]);
+  else if (parsedArgs.t !== undefined) textImageSettings.transparencyThreshold = parseInt(parsedArgs.t);
 
   await printImage(textImageSettings);
 } else if (parsedArgs.V) {
@@ -50,13 +56,17 @@ IMAGE PRINTING OPTIONS
 <path> [OR -f, --file <path>] 
   The image URL/path of the input image (required)
 -w, --width <width>
-  The number of characters wde the output image should be
+  The number of characters wide the output image should be
 -m, --character-map <character-map>
   The character map to use for the output image
 -i, --inverted
   Inverts the character map
 -n, --no-color
   Sets to output image to not be in color
+-l, --animation-loops
+  If the image is animated, this controls the number of times the animation loops
+-t, --transparency-threshold
+  The alpha threshold for considering a pixel transparent or opaque
 `);
 } else {
   console.error("Invalid command. Run --help for usage information.");
