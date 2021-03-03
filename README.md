@@ -49,8 +49,8 @@ This should output something like this:
 | Property | Type | Description | Default Value | CLI Flag |
 |-|-|-|-|-|
 | `path` | string | The path or URL of the input image. | No default | `--file` or `-f` or the first CLI argument |
-| `rawFile` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
-| `rawPixels` | {data: UintArray; width: number; height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
+| `rawFile` | Uint8Array | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
+| `rawPixels` | {data: Uint8Array; width: number; height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
 | `color` | boolean | Whether the output should be in color. | `true` | `--no-color` or `-n` to turn off color |
 | `characterMap` | string \| string[] | See the section on character maps for more information. | By default a character map isn't used, and high-res mode is used instead. | `--character-map` or `-m` |
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
