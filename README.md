@@ -78,11 +78,13 @@ This should output something like this:
 |-|-|-|-|-|
 | `path` | string | The path or URL of the input image. | No default | `--file` or `-f` |
 | `rawFile` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
-| `rawPixels` | {data: UintArray, width: number, height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
+| `rawPixels` | {data: UintArray; width: number; height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
 | `color` | boolean | Whether the output should be in color. | `false` | `--color` or `-c` |
 | `characterMap` | string \| string[] | See the section on character maps for more information. | By default a character map isn't used, and high-res mode is used instead. | `--character-map` or `-m` |
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
 | `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `-w` |
+| `animationLoops` | number | The number of times the animation loops, if the image is animated. | 1 | `--animation-loops` or `-l` |
+| `transparencyThreshold` | number | The alpha threshold for considering a pixel transparent or opaque. Set to 0 to ignore transparency and 255 to set anything with a little transparency to be completely transparent. Note that the terminal can only display completely transparent and completely opaque colors. | 1 | `--transparency-threshold` or `-t` |
 
 _Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution (unless you have manually set `width`) if the font size is smaller and the terminal window is larger, as more can fit on the screen._
 
@@ -134,7 +136,7 @@ For more example outputs, have a look at the images folder.
 * [X] Add high(er) resolution output mode
 * [X] Correctly handle characters such as emojis that have a width that isn't 1
 * [X] Add support for GIF images
-* [X] Deal with transparency better (especially for high-res mode)
+* [X] Deal with transparency better
 * [ ] Fix some images not displaying correct colors (incorrect black and white, not dispalying transparent)
 * [ ] Fix some images displaying at the incorrect size (too large) by default
 * [ ] Add some tests
@@ -147,7 +149,7 @@ For more example outputs, have a look at the images folder.
 
 ## Contributions
 
-Contributions are welcome! Just pick something to do (the todo list above is a good starting point) and let me know you want to work on it by opening an issue or commenting on a relevant existing issue.
+Contributions are welcome and greatly appreciated! Just pick something to do (the todo list above is a good starting point) and let me know you want to work on it by opening an issue or commenting on a relevant existing issue.
 
 If you think you have found a bug, please open an issue (after checking for similar issues).
 
