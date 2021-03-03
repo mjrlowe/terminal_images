@@ -92,10 +92,10 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
   for (let frameIndex = 0; frameIndex < decodedImage.numFrames; frameIndex++) {
     let outputString = "";
     for (
-      let y = characterWidth; y < imagePixelHeight - characterWidth; y += characterWidth * 2
+      let y = characterWidth; y <= imagePixelHeight - characterWidth; y += characterWidth * 2
     ) {
       for (
-        let x: number = characterWidth / 2; x < imagePixelWidth - characterWidth / 2; x += 0
+        let x: number = characterWidth / 2; x <= imagePixelWidth - characterWidth / 2; x += 0
       ) {
         let char: string;
         if (characterMap === undefined) {
@@ -240,7 +240,7 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
         outputString += char;
         x += characterWidth * stringWidth(char);
       }
-      if (y < imagePixelHeight - characterWidth * 3) outputString += "\n";
+      if (y < imagePixelHeight - characterWidth) outputString += "\n";
     }
     outputStrings.push(outputString);
   }
@@ -349,12 +349,13 @@ async function printImage(settings: imageSettings): Promise < void > {
     setTimeout(async () => {
       
       console.log(outputStrings[frameIndex%outputStrings.length])
-      tty.goUpSync(height);
 
       if (frameIndex === numFrames - 1) {
-        tty.goDownSync(height + 1);
+        // tty.goDownSync(height + 2);
         tty.showCursor();
 
+      }else{
+        tty.goUpSync(height);
       }
     }, frameIndex * 200);
 

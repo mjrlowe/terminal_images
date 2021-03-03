@@ -2,7 +2,7 @@
 
 **terminal_images** is a Deno module and CLI tool, written in TypeScript, for displaying images in the terminal.
 
-It supports PNG, JPG, GIF and  arrays, and has support for animated GIFs and transparent images.
+It supports PNGs, JPGs, GIFs and pixel arrays, and has support for animated GIFs and transparent images.
 
 To install the CLI tool, run the following from the command line:
 
@@ -13,7 +13,7 @@ deno install --allow-read --allow-net --unstable --force https://x.nest.land/ter
 Then run
 
 ```shell
-terminal_images --file="https://deno.land/images/hashrock_simple.png" --character-map="   % @"
+terminal_images https://deno.land/images/hashrock_simple.png
 ```
 
 ...and you should see something like this displayed in your terminal:
@@ -76,7 +76,7 @@ This should output something like this:
 
 | Property | Type | Description | Default Value | CLI Flag |
 |-|-|-|-|-|
-| `path` | string | The path or URL of the input image. | No default | `--file` or `-f` |
+| `path` | string | The path or URL of the input image. | No default | `--file` or `-f` or the first CLI argument |
 | `rawFile` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
 | `rawPixels` | {data: UintArray; width: number; height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
 | `color` | boolean | Whether the output should be in color. | `false` | `--color` or `-c` |

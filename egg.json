@@ -3,8 +3,8 @@
   "name": "terminal_images",
   "entry": "./mod.ts",
   "description": "A Deno module and CLI tool for displaying images in the terminal",
-  "homepage": "https://github.com/TheWizardBear/terminal_images",
-  "version": "2.1.2",
+  "homepage": "https://github.com/mjrlowe/terminal_images",
+  "version": "3.0.0",
   "files": [
     "./README.md",
     "./mod.ts",
