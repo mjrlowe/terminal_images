@@ -22,20 +22,17 @@ terminal_images https://deno.land/images/hashrock_simple.png
 
 _Note that the size might be different, as by default it adapts to the size of your terminal._
 
- You can also use the module, which has exports two functions: `getImageString` and `printImageString`, which both take in an object with the same properties.
+ You can also use the module, which has exports two functions: `getImageString` and `printImage`, which both take in an object with the same properties.
 
  Here is an example of how you can use it:
 
  ```ts
-import { printImageString } from "https://x.nest.land/terminal_images@3.0.0/mod.ts";
+import { printImage } from "https://x.nest.land/terminal_images@3.0.0/mod.ts";
 
-printImageString({
+printImage({
 
   // replace this with the URL or local file path of the image you want to print out
   path: "https://deno.land/images/deno_city.jpeg",
-
-  // when true the output will be in color
-  color: true,
 
   // by default the size of the image is set to fit in the terminal,
   // but you can override it with the width property
@@ -54,7 +51,7 @@ This should output something like this:
 | `path` | string | The path or URL of the input image. | No default | `--file` or `-f` or the first CLI argument |
 | `rawFile` | UintArray | The raw data of the input image. (You can use this instead of `path`) | No default | [No CLI flag] |
 | `rawPixels` | {data: UintArray; width: number; height: number} | The rgb(a) data (as well as the height and width) of the input image. (You can use this instead of `path` or `rawFile`) | No default | [No CLI flag] |
-| `color` | boolean | Whether the output should be in color. | `false` | `--color` or `-c` |
+| `color` | boolean | Whether the output should be in color. | `true` | `--no-color` or `-n` to turn off color |
 | `characterMap` | string \| string[] | See the section on character maps for more information. | By default a character map isn't used, and high-res mode is used instead. | `--character-map` or `-m` |
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
 | `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `-w` |
