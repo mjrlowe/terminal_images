@@ -2,7 +2,7 @@
 
 **terminal_images** is a Deno module and CLI tool, written in TypeScript, for displaying images in the terminal.
 
-Currently only PNG and JPG images are supported.
+It supports PNG, JPG, GIF and  arrays, and has support for animated GIFs and transparent images.
 
 To install the CLI tool, run the following from the command line:
 

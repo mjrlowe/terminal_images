@@ -70,8 +70,6 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
     );
   }
 
-  console.log(decodedImage)
-
   const imagePixelWidth = decodedImage.width;
   const imagePixelHeight = decodedImage.height;
 
@@ -178,12 +176,12 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
             
             By default, group 1 is the foreground and group 0  is the background,
             but if the bottom of the cell is all group 1, this should be switched.
+
+            If the foreground color is transparent, we need to switch colors as well, 
+            since only the background can be displayed transparently.
             */
           let switchColors = (organisedValues[2].group === 1 &&
             organisedValues[3].group === 1 && backgroundColor.a > transparencyThreshold) || foregroundColor.a < transparencyThreshold;
-          //  if(foregroundColor.a < transparencyThreshold) {
-          //    switchColors = true;
-          //   }
 
           for (let value of organisedValues) {
 
