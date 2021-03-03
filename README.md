@@ -22,7 +22,7 @@ terminal_images https://deno.land/images/hashrock_simple.png
 
 _Note that the size might be different, as by default it adapts to the size of your terminal._
 
- You can also use the module, which has exports two functions: `getImageString` and `printImage`, which both take in an object with the same properties.
+ You can also use the module, which has exports two functions: `getImageStrings` and `printImage`, which both take in an object with the same properties.
 
  Here is an example of how you can use it:
 
@@ -93,7 +93,7 @@ Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in 
 ![Inverted image loaded from unsplash](./examples/unsplash_photo_with_inverted_character_map.png)
 ![Colored high-res image loaded from unsplash](./examples/small_high_res_colored_image.png)
 
-For more example outputs, have a look at the images folder.
+For more example outputs, have a look at the examples folder.
 
 ## Todo
 
