@@ -18,7 +18,7 @@ terminal_images https://deno.land/images/hashrock_simple.png
 
 ...and you should see something like this:
 
-![basic terminal Deno image](./images/basic_demo.png)
+![basic terminal Deno image](./examples/basic_demo.png)
 
 _Note that the size might be different, as by default it adapts to the size of your terminal._
 
@@ -42,7 +42,7 @@ printImage({
 
 This should output something like this:
 
-![pixelated terminal image](./images/color_terminal_output_example.png)
+![pixelated terminal image](./examples/color_terminal_output_example.png)
 
 ## API
 
@@ -90,8 +90,8 @@ Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in 
 
 ## Examples
 
-![Inverted image loaded from unsplash](./images/unsplash_photo_with_inverted_character_map.png)
-![Colored high-res image loaded from unsplash](./images/small_high_res_colored_image.png)
+![Inverted image loaded from unsplash](./examples/unsplash_photo_with_inverted_character_map.png)
+![Colored high-res image loaded from unsplash](./examples/small_high_res_colored_image.png)
 
 For more example outputs, have a look at the images folder.
 
