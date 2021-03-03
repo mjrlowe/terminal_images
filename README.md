@@ -56,7 +56,7 @@ This should output something like this:
 | `inverted` | boolean | Whether the character map should be mapped from light to dark instead of dark to light. Normally you will want to set this to true if your terminal is in a dark theme. | `false` | `--inverted` or `-i` |
 | `width` | number | The number of characters wide the image should be. | The maximum value where all of the image is visible at once | `--width` or `-w` |
 | `animationLoops` | number | The number of times the animation loops, if the image is animated. | 1 | `--animation-loops` or `-l` |
-| `transparencyThreshold` | number | The alpha threshold for considering a pixel transparent or opaque. Set to 0 to ignore transparency and 255 to set anything with a little transparency to be completely transparent. Note that the terminal can only display completely transparent and completely opaque colors. | 1 | `--transparency-threshold` or `-t` |
+| `transparencyThreshold` | number | The alpha threshold for considering a pixel transparent or opaque. Set to 0 to ignore transparency and 255 to set anything with even a little transparency to be completely transparent. Note that the terminal can only display completely transparent and completely opaque colors. | 1 | `--transparency-threshold` or `-t` |
 
 _Because the size of the image automatically adapts to the size of your console, the image produced will have a higher resolution (unless you have manually set `width`) if the font size is smaller and the terminal window is larger, as more can fit on the screen._
 
