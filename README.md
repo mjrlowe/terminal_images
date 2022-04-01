@@ -13,7 +13,7 @@ deno install --allow-read --allow-net --unstable --force https://x.nest.land/ter
 Then run
 
 ```shell
-terminal_images https://deno.land/images/hashrock_simple.png
+terminal_images https://deno.land/images/artwork/hashrock_simple.png
 ```
 
 ...and you should see something like this:
