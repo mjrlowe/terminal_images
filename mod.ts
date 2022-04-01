@@ -338,6 +338,10 @@ function calculateGroups(values: rgba[]) {
 async function printImage(settings: imageSettings): Promise < void > {
   const outputStrings = await getImageStrings(settings);
 
+  const encoder = new TextEncoder();
+
+  const encodedFrames = outputStrings.map(frameString => encoder.encode(frameString));
+
   //const width = stringWidth(outputStrings[0].split("\n")[0]);
   const height = (outputStrings[0]?.match(/\n/g)?.length ?? 0) + 1;
   tty.hideCursorSync();
@@ -348,7 +352,8 @@ async function printImage(settings: imageSettings): Promise < void > {
   for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
     setTimeout(async () => {
       
-      console.log(outputStrings[frameIndex%outputStrings.length])
+      //console.log(outputStrings[frameIndex%outputStrings.length])
+      Deno.stdout.writeSync(encodedFrames[frameIndex%outputStrings.length])
 
       if (frameIndex === numFrames - 1) {
         // tty.goDownSync(height + 2);
