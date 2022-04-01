@@ -338,33 +338,29 @@ function calculateGroups(values: rgba[]) {
 async function printImage(settings: imageSettings): Promise < void > {
   const outputStrings = await getImageStrings(settings);
 
-  const encoder = new TextEncoder();
-
-  const encodedFrames = outputStrings.map(frameString => encoder.encode(frameString));
-
-  //const width = stringWidth(outputStrings[0].split("\n")[0]);
-  const height = (outputStrings[0]?.match(/\n/g)?.length ?? 0) + 1;
-  tty.hideCursorSync();
-
-  //If it is an animation, add an extra frame so we end where we started.
-  const numFrames = outputStrings.length === 1 ? 1 : outputStrings.length * (settings.animationLoops ?? 1) + 1;
-
-  for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
-    setTimeout(async () => {
-      
-      //console.log(outputStrings[frameIndex%outputStrings.length])
-      Deno.stdout.writeSync(encodedFrames[frameIndex%outputStrings.length])
-
-      if (frameIndex === numFrames - 1) {
-        // tty.goDownSync(height + 2);
-        tty.showCursor();
-
-      }else{
-        tty.goUpSync(height);
-      }
-    }, frameIndex * 200);
-
-  }
+  return new Promise((resolve) => {
+    //const width = stringWidth(outputStrings[0].split("\n")[0]);
+    const height = (outputStrings[0]?.match(/\n/g)?.length ?? 0) + 1;
+    tty.hideCursorSync();
+  
+    //If it is an animation, add an extra frame so we end where we started.
+    const numFrames = outputStrings.length === 1 ? 1 : outputStrings.length * (settings.animationLoops ?? 1) + 1;
+  
+    for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
+      setTimeout(async () => {
+        
+        console.log(outputStrings[frameIndex%outputStrings.length])
+  
+        if (frameIndex === numFrames - 1) {
+          // tty.goDownSync(height + 2);
+          tty.showCursorSync();
+          resolve();
+        }else{
+          tty.goUpSync(height);
+        }
+      }, frameIndex * 200);
+    }
+  })
 }
 
 function colorDistance(color1: rgba, color2: rgba) {
