@@ -32,7 +32,7 @@ import { printImage } from "https://x.nest.land/terminal_images@3.0.0/mod.ts";
 printImage({
 
   // replace this with the URL or local file path of the image you want to print out
-  path: "https://deno.land/images/deno_city.jpeg",
+  path: "https://deno.land/images/artwork/deno_city.jpeg",
 
   // by default the size of the image is set to fit in the terminal,
   // but you can override it with the width property
