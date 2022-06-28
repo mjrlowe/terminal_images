@@ -64,12 +64,6 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
     throw new Error("No file path or raw data specified.");
   }
 
-  if (decodedImage.fileFormat === "unknown") {
-    throw new Error(
-      `Image file type not recognised. Only PNG, JPG and GIF formats are supported.`,
-    );
-  }
-
   const imagePixelWidth = decodedImage.width;
   const imagePixelHeight = decodedImage.height;
 

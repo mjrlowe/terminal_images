@@ -25,7 +25,7 @@ export async function decodeImageFromRawFile(fileData: Uint8Array) {
   } else if (fileType === "gif") {
     decodedImage = decodeGif(fileData);
   } else {
-    throw new Error("File type not supported.");
+    throw new Error("Image file type not recognised. Only PNG, JPG and GIF formats are supported.");
   }
   decodedImage.fileType = fileType;
 
