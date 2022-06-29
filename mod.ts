@@ -1,8 +1,4 @@
-import {
-  colors,
-  stringWidth,
-  tty
-} from "./deps.ts";
+import { colors, stringWidth, tty } from "./deps.ts";
 import {
   decodeImageFromPath,
   decodeImageFromRawFile,
@@ -10,23 +6,23 @@ import {
 } from "./decode.ts";
 interface imageSettings {
   /** The local file path or URL of the image */
-  path? : string;
+  path?: string;
   /** The raw data of a PNG or JPG image */
-  rawFile? : Uint8Array;
+  rawFile?: Uint8Array;
   /** The raw data for the image: the rgb(a) array as well as the height and width */
-  rawPixels? : rawPixelData;
+  rawPixels?: rawPixelData;
   /** The character map to use when outputting the image */
-  characterMap? : string | string[];
+  characterMap?: string | string[];
   /** The number of characters wide the output image is */
-  width? : number;
+  width?: number;
   /** whether the character map should be inverted */
-  inverted? : boolean;
+  inverted?: boolean;
   /** Whether the output image should be in color */
-  color? : boolean;
+  color?: boolean;
   /** The alpha threshold for considering a pixel transparent or opaque */
-  transparencyThreshold? : number;
+  transparencyThreshold?: number;
   /** The number of times the image should loop if it is an animation */
-  animationLoops? : number;
+  animationLoops?: number;
 }
 
 interface rawPixelData {
@@ -45,10 +41,10 @@ interface rgba {
 const MIN_AUTO_WIDTH = 12;
 
 /** Returns a promise which resolves to a string version of the image that can outputted to the console. */
-async function getImageStrings(settings: imageSettings): Promise < string[] > {
-  const characterMap = settings.characterMap ?
-    [...settings.characterMap] :
-    undefined;
+async function getImageStrings(settings: imageSettings): Promise<string[]> {
+  const characterMap = settings.characterMap
+    ? [...settings.characterMap]
+    : undefined;
   const inverted = settings.inverted ?? false;
   const color = settings.color ?? true;
   const transparencyThreshold = settings.transparencyThreshold ?? 1;
@@ -66,7 +62,7 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
 
   if (decodedImage.fileFormat === "unknown") {
     throw new Error(
-      `Image file type not recognised. Only PNG, JPG and GIF formats are supported.`,
+      `Image file type not recognised. Only PNG, JPG and GIF formats are supported.`
     );
   }
 
@@ -82,64 +78,68 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
     const terminalHeight = Deno.consoleSize(Deno.stdout.rid).rows;
 
     characterWidth =
-      (terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2) ?
-      imagePixelWidth / terminalWidth :
-      imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
+      terminalWidth < Math.max(terminalHeight, MIN_AUTO_WIDTH) * 2
+        ? imagePixelWidth / terminalWidth
+        : imagePixelHeight / (Math.max(terminalHeight, MIN_AUTO_WIDTH) - 2) / 2;
   }
 
-  let outputStrings: string[] = [];
+  const outputStrings: string[] = [];
 
   for (let frameIndex = 0; frameIndex < decodedImage.numFrames; frameIndex++) {
     let outputString = "";
     for (
-      let y = characterWidth; y <= imagePixelHeight - characterWidth; y += characterWidth * 2
+      let y = characterWidth;
+      y <= imagePixelHeight - characterWidth;
+      y += characterWidth * 2
     ) {
       for (
-        let x: number = characterWidth / 2; x <= imagePixelWidth - characterWidth / 2; x += 0
+        let x: number = characterWidth / 2;
+        x <= imagePixelWidth - characterWidth / 2;
+        x += 0
       ) {
         let char: string;
         if (characterMap === undefined) {
-          let values = [
+          const values = [
             decodedImage.getPixel(
               Math.floor(x - characterWidth / 4),
               Math.floor(y - characterWidth / 2),
-              frameIndex,
+              frameIndex
             ),
             decodedImage.getPixel(
               Math.floor(x + characterWidth / 4),
               Math.floor(y - characterWidth / 2),
-              frameIndex,
+              frameIndex
             ),
             decodedImage.getPixel(
               Math.floor(x - characterWidth / 4),
               Math.floor(y + characterWidth / 2),
-              frameIndex,
+              frameIndex
             ),
             decodedImage.getPixel(
               Math.floor(x + characterWidth / 4),
               Math.floor(y + characterWidth / 2),
-              frameIndex,
+              frameIndex
             ),
           ];
 
           const organisedValues = calculateGroups(values);
           let characterIndex = 0;
-          let group0TotalColor = {
+          const group0TotalColor = {
             r: 0,
             g: 0,
             b: 0,
-            a: 0
+            a: 0,
           };
-          let group1TotalColor = {
+          const group1TotalColor = {
             r: 0,
             g: 0,
             b: 0,
-            a: 0
+            a: 0,
           };
           let group0Count = 0;
           let group1Count = 0;
 
-          for (let value of organisedValues) {
+          for (const value of organisedValues) {
             if (value.group === 0) {
               group0TotalColor.r += value.color.r;
               group0TotalColor.g += value.color.g;
@@ -180,13 +180,15 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
             If the foreground color is transparent, we need to switch colors as well, 
             since only the background can be displayed transparently.
             */
-          let switchColors = (organisedValues[2].group === 1 &&
-            organisedValues[3].group === 1 && backgroundColor.a > transparencyThreshold) || foregroundColor.a < transparencyThreshold;
+          const switchColors =
+            (organisedValues[2].group === 1 &&
+              organisedValues[3].group === 1 &&
+              backgroundColor.a > transparencyThreshold) ||
+            foregroundColor.a < transparencyThreshold;
 
-          for (let value of organisedValues) {
-
-            characterIndex += 2 ** value.id *
-              (switchColors ? 1 - value.group : value.group);
+          for (const value of organisedValues) {
+            characterIndex +=
+              2 ** value.id * (switchColors ? 1 - value.group : value.group);
           }
 
           if (!color) {
@@ -200,17 +202,20 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
             foregroundColor.b = foregroundLightness;
           }
 
-          char = " ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█" [characterIndex];
-          if (backgroundColor.a < transparencyThreshold && foregroundColor.a < transparencyThreshold) {
+          char = " ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█"[characterIndex];
+          if (
+            backgroundColor.a < transparencyThreshold &&
+            foregroundColor.a < transparencyThreshold
+          ) {
             char = " ";
           } else if (backgroundColor.a < transparencyThreshold) {
-            char = colors.rgb24(char, foregroundColor)
+            char = colors.rgb24(char, foregroundColor);
           } else if (foregroundColor.a < transparencyThreshold) {
-            char = colors.rgb24(char, backgroundColor)
+            char = colors.rgb24(char, backgroundColor);
           } else {
             char = colors.bgRgb24(
               colors.rgb24(char, foregroundColor),
-              backgroundColor,
+              backgroundColor
             );
             if (switchColors) char = colors.inverse(char);
           }
@@ -218,7 +223,7 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
           const pixelColor = decodedImage.getPixel(
             Math.floor(x),
             Math.floor(y),
-            frameIndex,
+            frameIndex
           );
           const grayscaleValue = colorLightness(pixelColor);
 
@@ -227,15 +232,15 @@ async function getImageStrings(settings: imageSettings): Promise < string[] > {
           }
 
           let characterIndex = Math.floor(
-            grayscaleValue / 255 * (characterMap.length - 0.5),
+            (grayscaleValue / 255) * (characterMap.length - 0.5)
           );
-          characterIndex = inverted ?
-            characterMap.length - 1 - characterIndex :
-            characterIndex;
+          characterIndex = inverted
+            ? characterMap.length - 1 - characterIndex
+            : characterIndex;
 
-          char = color ?
-            colors.rgb24(characterMap[characterIndex], pixelColor) :
-            characterMap[characterIndex];
+          char = color
+            ? colors.rgb24(characterMap[characterIndex], pixelColor)
+            : characterMap[characterIndex];
         }
         outputString += char;
         x += characterWidth * stringWidth(char);
@@ -255,20 +260,20 @@ The algorithm used below tries to make the two groups
 have similar colors within the group.
 */
 function calculateGroups(values: rgba[]) {
-  const groups: any = [
-    [],
-    []
-  ];
+  const groups: any = [[], []];
   const allSortedNeighbors = values.map((color, idA) => {
-    const neighbors = values.map((color, id) => {
-      return {
-        color,
-        id
-      };
-    }).filter((v, idB) => idA !== idB).sort(
-      (v1, v2) =>
-      colorDistance(color, v1.color) - colorDistance(color, v2.color),
-    );
+    const neighbors = values
+      .map((color, id) => {
+        return {
+          color,
+          id,
+        };
+      })
+      .filter((v, idB) => idA !== idB)
+      .sort(
+        (v1, v2) =>
+          colorDistance(color, v1.color) - colorDistance(color, v2.color)
+      );
     return {
       id: idA,
       neighbors,
@@ -322,64 +327,65 @@ function calculateGroups(values: rgba[]) {
     ...groups[0].map((v: any) => {
       return {
         ...v,
-        group: 0
+        group: 0,
       };
     }),
     ...groups[1].map((v: any) => {
       return {
         ...v,
-        group: 1
+        group: 1,
       };
     }),
   ].sort((v1, v2) => v1.id - v2.id);
 }
 
 /** Outputs the image to the console. */
-async function printImage(settings: imageSettings): Promise < void > {
+async function printImage(settings: imageSettings): Promise<void> {
   const outputStrings = await getImageStrings(settings);
 
   return new Promise((resolve) => {
     //const width = stringWidth(outputStrings[0].split("\n")[0]);
     const height = (outputStrings[0]?.match(/\n/g)?.length ?? 0) + 1;
     tty.hideCursorSync();
-  
+
     //If it is an animation, add an extra frame so we end where we started.
-    const numFrames = outputStrings.length === 1 ? 1 : outputStrings.length * (settings.animationLoops ?? 1) + 1;
-  
+    const numFrames =
+      outputStrings.length === 1
+        ? 1
+        : outputStrings.length * (settings.animationLoops ?? 1) + 1;
+
     for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
-      setTimeout(async () => {
-        
-        console.log(outputStrings[frameIndex%outputStrings.length])
-  
+      setTimeout(() => {
+        console.log(outputStrings[frameIndex % outputStrings.length]);
+
         if (frameIndex === numFrames - 1) {
           // tty.goDownSync(height + 2);
           tty.showCursorSync();
           resolve();
-        }else{
+        } else {
           tty.goUpSync(height);
         }
       }, frameIndex * 200);
     }
-  })
+  });
 }
 
 function colorDistance(color1: rgba, color2: rgba) {
   //calculate the visual distance between colors using pythagoras's theorem in rgba space
   //not totally accurate but it's fast and simple
-  return ((color1.r - color2.r) ** 2 + (color1.g - color2.g) ** 2 +
-    (color1.b - color2.b) ** 2 +
-    (color1.a - color2.a) ** 2) ** 0.5;
+  return (
+    ((color1.r - color2.r) ** 2 +
+      (color1.g - color2.g) ** 2 +
+      (color1.b - color2.b) ** 2 +
+      (color1.a - color2.a) ** 2) **
+    0.5
+  );
 }
 
 function colorLightness(color: rgba) {
   return (color.r + color.g + color.b) / 3;
 }
 
-export {
-  getImageStrings,
-  printImage
-};
+export { getImageStrings, printImage };
 
-export type {
-  imageSettings
-};
+export type { imageSettings };

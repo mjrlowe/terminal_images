@@ -32,23 +32,21 @@ export async function decodeImageFromRawFile(fileData: Uint8Array) {
   return await decodeImageFromRawPixels(decodedImage);
 }
 
-export async function decodeImageFromRawPixels(decodedImage: any) {
+export function decodeImageFromRawPixels(decodedImage: any) {
   decodedImage.fileType ??= "raw";
   return setAttributes(decodedImage);
 }
 
 function getFileType(rawFile: Uint8Array): string {
   const signatures: { [key: string]: number[][] } = {
-    "png": [
-      [137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82],
-    ],
-    "jpg": [
+    png: [[137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82]],
+    jpg: [
       [255, 216, 255, 219],
       [255, 216, 255, 224, 0, 16, 74, 70, 73, 70, 0, 1],
       [255, 216, 255, 238],
       [255, 216, 255, 225],
     ],
-    "gif": [
+    gif: [
       [71, 73, 70, 56, 55, 97],
       [71, 73, 70, 56, 57, 97],
     ],
@@ -56,9 +54,7 @@ function getFileType(rawFile: Uint8Array): string {
 
   for (const fileType in signatures) {
     for (const signature of signatures[fileType]) {
-      if (
-        String(rawFile.slice(0, signature.length)) === String(signature)
-      ) {
+      if (String(rawFile.slice(0, signature.length)) === String(signature)) {
         return fileType;
       }
     }
@@ -77,7 +73,7 @@ function decodeGif(rawFile: Uint8Array) {
   for (let frameIndex = 0; frameIndex < numFrames; frameIndex++) {
     const frameData = data.subarray(
       frameIndex * frameSize,
-      (frameIndex + 1) * frameSize,
+      (frameIndex + 1) * frameSize
     );
     reader.decodeAndBlitFrameRGBA(frameIndex, frameData);
 
@@ -98,30 +94,26 @@ function decodeGif(rawFile: Uint8Array) {
 export function setAttributes(decodedImage: any) {
   decodedImage.fileType ??= "unknown";
   decodedImage.numFrames ??= 1;
-  decodedImage.totalPixels = decodedImage.width * decodedImage.height *
-    decodedImage.numFrames;
+  decodedImage.totalPixels =
+    decodedImage.width * decodedImage.height * decodedImage.numFrames;
   decodedImage.valuesPerPixel ??=
     decodedImage.totalPixels * 4 <= decodedImage.data.length
       ? 4
       : decodedImage.totalPixels * 3 <= decodedImage.data.length
       ? 3
       : 1;
-  decodedImage.frameSize ??= decodedImage.valuesPerPixel * decodedImage.width *
-    decodedImage.height;
+  decodedImage.frameSize ??=
+    decodedImage.valuesPerPixel * decodedImage.width * decodedImage.height;
 
-  decodedImage.getFrameData = function (frameIndex: number = 0) {
+  decodedImage.getFrameData = function (frameIndex = 0) {
     return this.data.subarray(
       frameIndex * this.frameSize,
-      (frameIndex + 1) * this.frameSize,
+      (frameIndex + 1) * this.frameSize
     );
   };
-  decodedImage.getPixel = function (
-    x: number,
-    y: number,
-    frameIndex: number = 0,
-  ) {
+  decodedImage.getPixel = function (x: number, y: number, frameIndex = 0) {
     const frameData = this.getFrameData(frameIndex);
-    const index = x + (y * this.width);
+    const index = x + y * this.width;
     let pixelData;
 
     //with transparency values
@@ -139,7 +131,7 @@ export function setAttributes(decodedImage: any) {
         r: frameData[index * 3],
         g: frameData[index * 3 + 1],
         b: frameData[index * 3 + 2],
-        a: 255
+        a: 255,
       };
       //grayscale
     } else {
@@ -147,7 +139,7 @@ export function setAttributes(decodedImage: any) {
         r: frameData[index],
         g: frameData[index],
         b: frameData[index],
-        a: 255
+        a: 255,
       };
     }
     return pixelData;
