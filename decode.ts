@@ -38,8 +38,6 @@ function decodePngIncPal(fileData: Uint8Array) {
       decodedImage.valuesPerPixel = 3;
     }
 
-    console.log(palette);
-
     const depth = decodedImage.depth
 
     const bitsPerRow = decodedImage.width*depth;
@@ -171,7 +169,7 @@ export function setAttributes(decodedImage: any) {
   decodedImage.frameSize ??= decodedImage.valuesPerPixel * decodedImage.width *
     decodedImage.height;
 
-  decodedImage.getFrameData = function (frameIndex: number = 0) {
+  decodedImage.getFrameData = function (frameIndex = 0) {
     return this.data.subarray(
       frameIndex * this.frameSize,
       (frameIndex + 1) * this.frameSize,
@@ -180,10 +178,10 @@ export function setAttributes(decodedImage: any) {
   decodedImage.getPixel = function (
     x: number,
     y: number,
-    frameIndex: number = 0,
+    frameIndex = 0,
   ) {
     const frameData = this.getFrameData(frameIndex);
-    let index = x + (y * this.width);
+    const index = x + (y * this.width);
 
     let pixelData;
 
