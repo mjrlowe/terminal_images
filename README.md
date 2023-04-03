@@ -9,10 +9,10 @@ and transparent images.
 To install the CLI tool, run the following from the command line:
 
 ```shell
-deno install --allow-read --allow-net --force https://deno.land/x/terminal_images@3.1.0/cli.ts
+deno install --allow-read --allow-net -f -n terminal_images https://deno.land/x/terminal_images@3.1.0/cli.ts
 ```
 
-_Alternatively, terminal\_images can be installed from nest.land at the URL
+_Alternatively, terminal\_images can be installed from nest.land at the URL_
 `https://x.nest.land/terminal_images@3.1.0/cli.ts`.
 
 Then run
@@ -28,7 +28,7 @@ terminal_images https://deno.land/images/artwork/hashrock_simple.png
 _Note that the size might be different, as by default it adapts to the size of
 your terminal._
 
-You can also use the module, which has exports two functions: `getImageStrings`
+You can also use the module, which has exports two async functions: `getImageStrings`
 and `printImage`, which both take in an object with the same properties.
 
 Here is an example of how you can use it:
