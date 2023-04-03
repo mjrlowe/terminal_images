@@ -81,7 +81,7 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
 
   let characterWidth;
   if (settings.width) {
-    characterWidth = Math.ceil(imagePixelWidth / settings.width);
+    characterWidth = imagePixelWidth / settings.width;
   } else {
     //currently requires --unstable
     const terminalWidth = Deno.consoleSize(Deno.stdout.rid).columns;
