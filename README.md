@@ -92,11 +92,10 @@ character of the string).
   dark theme.
 - You can generate ASCII art by using character maps such as `"@#?)l+-. "` and
   blocky images using character maps like `█▓▒░`.
-- Make sure you have escaped any characters you nee3.d to with a backslash
-  (`\`).
-- You don't have to sort your characters from darksest to lightest or vice
-  versa. Play around with what works for specfic images, and see if you can
-  create any interesting effects.
+- Make sure you have escaped any characters you need to with a backslash (`\`).
+- You don't have to sort your characters from darkest to lightest or vice versa.
+  Play around with what works for specfic images, and see if you can create any
+  interesting effects.
 - Padding your character maps can be useful when brightness is not evenly
   distributed. For example, if your image has mostly dark tones, then your
   character map might have some extra spaces on the end, so that it is easier to
