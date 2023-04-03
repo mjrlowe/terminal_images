@@ -175,7 +175,7 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
             r: group1TotalColor.r / group1Count,
             g: group1TotalColor.g / group1Count,
             b: group1TotalColor.b / group1Count,
-            a: group1TotalColor.a / group0Count,
+            a: group1TotalColor.a / group1Count,
           };
 
           /*
@@ -313,7 +313,8 @@ function calculateGroups(values: rgba[]) {
   }
 
   const remainingColors = allSortedNeighbors.filter((v) => !v.added);
-  if (remainingColors.length > 0) {
+  if (remainingColors.length > 0) {          
+
     const group0Average = {
       r: (groups[0][0].color.r + groups[0][1].color.r) / 2,
       g: (groups[0][0].color.g + groups[0][1].color.g) / 2,
