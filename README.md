@@ -35,7 +35,7 @@ properties.
 Here is an example of how you can use it:
 
 ```ts
-import { printImage } from "https://deno.land/x/terminal_images@3.1.0/cli.ts";
+import { printImage } from "https://deno.land/x/terminal_images@3.1.0/mod.ts";
 
 printImage({
   // replace this with the URL or local file path of the image you want to print out
