@@ -9,8 +9,10 @@ and transparent images.
 To install the CLI tool, run the following from the command line:
 
 ```shell
-deno install --allow-read --allow-net --unstable --force https://x.nest.land/terminal_images@3.0.0/cli.ts
+deno install --allow-read --allow-net --force https://deno.land/x/terminal_images@3.1.0/cli.ts
 ```
+
+_Alternatively, terminal\_images can be installed from nest.land at the URL `https://x.nest.land/terminal_images@3.1.0/cli.ts`.
 
 Then run
 
@@ -31,7 +33,7 @@ and `printImage`, which both take in an object with the same properties.
 Here is an example of how you can use it:
 
 ```ts
-import { printImage } from "https://x.nest.land/terminal_images@3.0.0/mod.ts";
+import { printImage } from "https://deno.land/x/terminal_images@3.1.0/cli.ts";
 
 printImage({
   // replace this with the URL or local file path of the image you want to print out
@@ -88,7 +90,7 @@ character of the string).
   dark theme.
 - You can generate ASCII art by using character maps such as `"@#?)l+-. "` and
   blocky images using character maps like `█▓▒░`.
-- Make sure you have escaped any characters you need to with a backslash (`\`).
+- Make sure you have escaped any characters you nee3.d to with a backslash (`\`).
 - You don't have to sort your characters from darksest to lightest or vice
   versa. Play around with what works for specfic images, and see if you can
   create any interesting effects.
@@ -102,15 +104,13 @@ character of the string).
 
 ## Required Permissions
 
-| Flag           |  R  | Reason                              |
-| :------------- | :-: | :---------------------------------- |
-| `--unstable`   |  *  | To detect the size of your terminal |
-| `--allow-net`  |  _  | To fetch images from the web        |
-| `--allow-read` |  _  | To use images stored locally        |
+| Flag           |  R  | Reason                       |
+| :------------- | :-: | :----------------------------|
+| `--allow-net`  |  _  | To fetch images from the web |
+| `--allow-read` |  _  | To use images stored locally |
 
 Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in
-the CLI tool). When using `rawFile` or `rawPixels`, only the `--unstable` flag
-is needed.
+the CLI tool). When using `rawFile` or `rawPixels` no permission flags are required.
 
 ## Examples
 
@@ -136,7 +136,7 @@ For more example outputs, have a look at the examples folder.
 - [x] Add support for GIF images
 - [x] Deal with transparency better
 - [ ] Fix some images not displaying correct colors (incorrect black and white,
-      not dispalying transparent)
+      not displaying transparent)
 - [ ] Fix some images displaying at the incorrect size (too large) by default
 - [ ] Add some tests
 - [ ] Don't count modifier characters (e.g. emoji skin tones) as separate
@@ -153,7 +153,7 @@ Contributions are welcome and greatly appreciated! Just pick something to do
 (the todo list above is a good starting point) and let me know you want to work
 on it by opening an issue or commenting on a relevant existing issue.
 
-If you think you have found a bug, please open an issue (after checking for
+If you think you have found a bug, or would like to make a suggestion, please open an issue (after checking for
 similar issues).
 
 ## License

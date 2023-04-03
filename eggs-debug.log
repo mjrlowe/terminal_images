@@ -1,0 +1,25 @@
+Arguments:
+  update
+
+Deno version:
+  deno: 1.32.3
+  v8: 11.2.214.9
+  typescript: 5.0.3
+
+Eggs version:
+  0.3.10
+
+Platform:
+  x86_64-unknown-linux-gnu
+
+2023-04-03T19:11:13.825Z [DEBUG]    Options:  { file: "deps.ts" }
+2023-04-03T19:11:13.839Z [DEBUG]    Dependency file contents:  [
+  'export { decode as decodeJpeg } from "https://deno.land/x/jpegts@1.1/mod.ts";',
+  'export { parse } from "https://deno.land/std@0.77.0/flags/mod.ts";',
+  'export { stringWidth } from "https://deno.land/x/gutenberg@0.1.5/unicode/width/mod.ts";',
+  'export * as colors from "https://deno.land/std@0.77.0/fmt/colors.ts";',
+  'import unpng from "https://cdn.skypack.dev/upng-js@v2.1.0";',
+  'export { GifReader } from "https://cdn.skypack.dev/omggif";',
+  'export * as tty from "https://deno.land/x/tty@0.1.4/mod.ts";'
+]
+2023-04-03T19:11:13.842Z [CRITICAL] An unexpected error occurred: "Cannot read properties of undefined (reading 'length')" "TypeError: Cannot read properties of undefined (reading 'length')\n    at Command.update [as fn] (https://w667dmc4vj2cj3wqkvcm5x7jwdxuy3hbjvuok75nlgpyzgqdblgq.arweave.net/t73xsFyqdCTu0FVEzt_psO9MbOFNaOV_rVmfjJoDCs0/src/commands/update.ts:72:24)\n    at async Command.execute (https://n6bl3nualttvfwnavtlz25kfnm7vgznebjgildykly44wgau6ldq.arweave.net/b4K9toBc51LZoKzXnXVFaz9TZaQKTIWPCl45yxgU8sc/command/command.ts:1014:7)\n    at async Command.parse (https://n6bl3nualttvfwnavtlz25kfnm7vgznebjgildykly44wgau6ldq.arweave.net/b4K9toBc51LZoKzXnXVFaz9TZaQKTIWPCl45yxgU8sc/command/command.ts:928:16)\n    at async https://w667dmc4vj2cj3wqkvcm5x7jwdxuy3hbjvuok75nlgpyzgqdblgq.arweave.net/t73xsFyqdCTu0FVEzt_psO9MbOFNaOV_rVmfjJoDCs0/eggs.ts:74:23"
