@@ -1,5 +1,5 @@
 import { imageSettings, printImage } from "./mod.ts";
-import { colors, parse } from "./deps.ts";
+import { parse } from "./deps.ts";
 import version from "./version.ts";
 
 const parsedArgs = parse(Deno.args);
@@ -11,8 +11,9 @@ const textImageSettings: imageSettings = {
 if (typeof textImageSettings.path != "undefined") {
   if (parsedArgs["character-map"]) {
     textImageSettings.characterMap = String(parsedArgs["character-map"]);
+  } else if (parsedArgs.m) {
+    textImageSettings.characterMap = String(parsedArgs.m);
   }
-  else if (parsedArgs.m) textImageSettings.characterMap = String(parsedArgs.m);
 
   if (parsedArgs.width) textImageSettings.width = parseInt(parsedArgs.width);
   else if (parsedArgs.w) textImageSettings.width = parseInt(parsedArgs.w);
@@ -20,24 +21,30 @@ if (typeof textImageSettings.path != "undefined") {
   if (parsedArgs.inverted !== undefined) {
     textImageSettings.inverted =
       !(parsedArgs.inverted === "false" || !parsedArgs.inverted);
-  }
-  else if (parsedArgs.i !== undefined) {
+  } else if (parsedArgs.i !== undefined) {
     textImageSettings.inverted = !(parsedArgs.i === "false" || !parsedArgs.i);
   }
 
   if (parsedArgs.color !== undefined) {
     textImageSettings.color =
       !(parsedArgs.color === "false" || !parsedArgs.color);
-  }
-  else if (parsedArgs.n !== undefined) {
+  } else if (parsedArgs.n !== undefined) {
     textImageSettings.color = !parsedArgs.n;
   }
 
-  if (parsedArgs["animation-loops"]  !== undefined) textImageSettings.animationLoops = parseInt(parsedArgs["animation-loops"]);
-  else if (parsedArgs.l  !== undefined) textImageSettings.animationLoops = parseInt(parsedArgs.l);
+  if (parsedArgs["animation-loops"] !== undefined) {
+    textImageSettings.animationLoops = parseInt(parsedArgs["animation-loops"]);
+  } else if (parsedArgs.l !== undefined) {
+    textImageSettings.animationLoops = parseInt(parsedArgs.l);
+  }
 
-  if (parsedArgs["transparency-threshold"] !== undefined) textImageSettings.transparencyThreshold = parseInt(parsedArgs["transparency-threshold"]);
-  else if (parsedArgs.t !== undefined) textImageSettings.transparencyThreshold = parseInt(parsedArgs.t);
+  if (parsedArgs["transparency-threshold"] !== undefined) {
+    textImageSettings.transparencyThreshold = parseInt(
+      parsedArgs["transparency-threshold"],
+    );
+  } else if (parsedArgs.t !== undefined) {
+    textImageSettings.transparencyThreshold = parseInt(parsedArgs.t);
+  }
 
   await printImage(textImageSettings);
 } else if (parsedArgs.V) {

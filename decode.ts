@@ -25,25 +25,27 @@ function decodePngIncPal(fileData: Uint8Array) {
     }
 
     //alpha values
-    if(decodedImage.tabs.tRNS){
-      for (let i = 0; i < palette.length; i ++) {
+    if (decodedImage.tabs.tRNS) {
+      for (let i = 0; i < palette.length; i++) {
         // if the tRNS array has only one value, then only the first colour should have this alpha value
         // (all the other values should be 255)
-        const a = i >= decodedImage.tabs.tRNS.length ? 255 : decodedImage.tabs.tRNS[i]
+        const a = i >= decodedImage.tabs.tRNS.length
+          ? 255
+          : decodedImage.tabs.tRNS[i];
 
         palette[i].push(a);
       }
       decodedImage.valuesPerPixel = 4;
-    }else{
+    } else {
       decodedImage.valuesPerPixel = 3;
     }
 
-    const depth = decodedImage.depth
+    const depth = decodedImage.depth;
 
-    const bitsPerRow = decodedImage.width*depth;
-    const bytesPerRow = Math.ceil(bitsPerRow/8);
-    let usefulBitsInFinalByteOfRow = bitsPerRow%8;
-    if(usefulBitsInFinalByteOfRow == 0) usefulBitsInFinalByteOfRow = 8;
+    const bitsPerRow = decodedImage.width * depth;
+    const bytesPerRow = Math.ceil(bitsPerRow / 8);
+    let usefulBitsInFinalByteOfRow = bitsPerRow % 8;
+    if (usefulBitsInFinalByteOfRow == 0) usefulBitsInFinalByteOfRow = 8;
 
     decodedImage.data = Uint8Array.from(
       Array.from(decodedImage.data).map(
@@ -52,19 +54,22 @@ function decodePngIncPal(fileData: Uint8Array) {
           const valBase2 = valBase10.toString(2);
           const valBase2Byte = valBase2.padStart(8, "0");
 
-          const isFinalByteOfRow = (i%bytesPerRow === bytesPerRow - 1);
+          const isFinalByteOfRow = i % bytesPerRow === bytesPerRow - 1;
           const usefulBits = isFinalByteOfRow ? usefulBitsInFinalByteOfRow : 8;
 
           const indexes = [];
-          for(let j = 0; j < usefulBits; j+=depth){
-            const relevantBits = valBase2Byte.substring(j, j+depth);
+          for (let j = 0; j < usefulBits; j += depth) {
+            const relevantBits = valBase2Byte.substring(j, j + depth);
             indexes.push(parseInt(relevantBits, 2));
           }
 
-          const rgbVals : number[] = indexes.reduce((arr, j) => [...arr, ...palette[j]], [] as number[]);
+          const rgbVals: number[] = indexes.reduce(
+            (arr, j) => [...arr, ...palette[j]],
+            [] as number[],
+          );
 
           return rgbVals;
-        }
+        },
       ).flat(),
     );
   }
@@ -72,7 +77,7 @@ function decodePngIncPal(fileData: Uint8Array) {
   return decodedImage;
 }
 
-export async function decodeImageFromRawFile(fileData: Uint8Array) {
+export function decodeImageFromRawFile(fileData: Uint8Array) {
   const fileType = getFileType(fileData);
 
   let decodedImage;
@@ -89,10 +94,10 @@ export async function decodeImageFromRawFile(fileData: Uint8Array) {
   }
   decodedImage.fileType = fileType;
 
-  return await decodeImageFromRawPixels(decodedImage);
+  return decodeImageFromRawPixels(decodedImage);
 }
 
-export async function decodeImageFromRawPixels(decodedImage: any) {
+export function decodeImageFromRawPixels(decodedImage: any) {
   decodedImage.fileType ??= "raw";
   return setAttributes(decodedImage);
 }
