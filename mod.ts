@@ -70,12 +70,6 @@ async function getImageStrings(settings: imageSettings): Promise<string[]> {
     throw new Error("No file path or raw data specified.");
   }
 
-  if (decodedImage.fileFormat === "unknown") {
-    throw new Error(
-      `Image file type not recognised. Only PNG, JPG and GIF formats are supported.`,
-    );
-  }
-
   const imagePixelWidth = decodedImage.width;
   const imagePixelHeight = decodedImage.height;
 
@@ -313,8 +307,7 @@ function calculateGroups(values: rgba[]) {
   }
 
   const remainingColors = allSortedNeighbors.filter((v) => !v.added);
-  if (remainingColors.length > 0) {          
-
+  if (remainingColors.length > 0) {
     const group0Average = {
       r: (groups[0][0].color.r + groups[0][1].color.r) / 2,
       g: (groups[0][0].color.g + groups[0][1].color.g) / 2,

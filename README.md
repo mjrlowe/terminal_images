@@ -12,7 +12,8 @@ To install the CLI tool, run the following from the command line:
 deno install --allow-read --allow-net --force https://deno.land/x/terminal_images@3.1.0/cli.ts
 ```
 
-_Alternatively, terminal\_images can be installed from nest.land at the URL `https://x.nest.land/terminal_images@3.1.0/cli.ts`.
+_Alternatively, terminal\_images can be installed from nest.land at the URL
+`https://x.nest.land/terminal_images@3.1.0/cli.ts`.
 
 Then run
 
@@ -90,7 +91,8 @@ character of the string).
   dark theme.
 - You can generate ASCII art by using character maps such as `"@#?)l+-. "` and
   blocky images using character maps like `█▓▒░`.
-- Make sure you have escaped any characters you nee3.d to with a backslash (`\`).
+- Make sure you have escaped any characters you nee3.d to with a backslash
+  (`\`).
 - You don't have to sort your characters from darksest to lightest or vice
   versa. Play around with what works for specfic images, and see if you can
   create any interesting effects.
@@ -105,12 +107,13 @@ character of the string).
 ## Required Permissions
 
 | Flag           |  R  | Reason                       |
-| :------------- | :-: | :----------------------------|
+| :------------- | :-: | :--------------------------- |
 | `--allow-net`  |  _  | To fetch images from the web |
 | `--allow-read` |  _  | To use images stored locally |
 
 Either `--allow-net` or `--allow-read` is needed when using `path` (`--file` in
-the CLI tool). When using `rawFile` or `rawPixels` no permission flags are required.
+the CLI tool). When using `rawFile` or `rawPixels` no permission flags are
+required.
 
 ## Examples
 
@@ -153,8 +156,8 @@ Contributions are welcome and greatly appreciated! Just pick something to do
 (the todo list above is a good starting point) and let me know you want to work
 on it by opening an issue or commenting on a relevant existing issue.
 
-If you think you have found a bug, or would like to make a suggestion, please open an issue (after checking for
-similar issues).
+If you think you have found a bug, or would like to make a suggestion, please
+open an issue (after checking for similar issues).
 
 ## License
 
