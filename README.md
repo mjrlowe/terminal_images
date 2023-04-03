@@ -28,7 +28,7 @@ terminal_images https://deno.land/images/artwork/hashrock_simple.png
 _Note that the size might be different, as by default it adapts to the size of
 your terminal._
 
-You can also use the module, which has exports two async functions:
+You can also use the module, which exports two async functions:
 `getImageStrings` and `printImage`, which both take in an object with the same
 properties.
 
