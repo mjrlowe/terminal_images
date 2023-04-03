@@ -14,18 +14,80 @@ export async function decodeImageFromPath(path: string) {
   return await decodeImageFromRawFile(fileData);
 }
 
+function decodePngIncPal(fileData: Uint8Array) {
+  const decodedImage = decodePng(fileData);
+
+  if (decodedImage?.tabs?.PLTE) {
+    const paletteFlat: number[] = decodedImage.tabs.PLTE;
+    const palette: number[][] = [];
+    for (let i = 0; i < paletteFlat.length; i += 3) {
+      palette.push([paletteFlat[i], paletteFlat[i + 1], paletteFlat[i + 2]]);
+    }
+
+    //alpha values
+    if(decodedImage.tabs.tRNS){
+      for (let i = 0; i < palette.length; i ++) {
+        // if the tRNS array has only one value, then only the first colour should have this alpha value
+        // (all the other values should be 255)
+        const a = i >= decodedImage.tabs.tRNS.length ? 255 : decodedImage.tabs.tRNS[i]
+
+        palette[i].push(a);
+      }
+      decodedImage.valuesPerPixel = 4;
+    }else{
+      decodedImage.valuesPerPixel = 3;
+    }
+
+    console.log(palette);
+
+    const depth = decodedImage.depth
+
+    const bitsPerRow = decodedImage.width*depth;
+    const bytesPerRow = Math.ceil(bitsPerRow/8);
+    let usefulBitsInFinalByteOfRow = bitsPerRow%8;
+    if(usefulBitsInFinalByteOfRow == 0) usefulBitsInFinalByteOfRow = 8;
+
+    decodedImage.data = Uint8Array.from(
+      Array.from(decodedImage.data).map(
+        (val, i) => {
+          const valBase10 = val as number;
+          const valBase2 = valBase10.toString(2);
+          const valBase2Byte = valBase2.padStart(8, "0");
+
+          const isFinalByteOfRow = (i%bytesPerRow === bytesPerRow - 1);
+          const usefulBits = isFinalByteOfRow ? usefulBitsInFinalByteOfRow : 8;
+
+          const indexes = [];
+          for(let j = 0; j < usefulBits; j+=depth){
+            const relevantBits = valBase2Byte.substring(j, j+depth);
+            indexes.push(parseInt(relevantBits, 2));
+          }
+
+          const rgbVals : number[] = indexes.reduce((arr, j) => [...arr, ...palette[j]], [] as number[]);
+
+          return rgbVals;
+        }
+      ).flat(),
+    );
+  }
+
+  return decodedImage;
+}
+
 export async function decodeImageFromRawFile(fileData: Uint8Array) {
   const fileType = getFileType(fileData);
 
   let decodedImage;
   if (fileType === "png") {
-    decodedImage = decodePng(fileData);
+    decodedImage = decodePngIncPal(fileData);
   } else if (fileType === "jpg") {
     decodedImage = decodeJpeg(fileData);
   } else if (fileType === "gif") {
     decodedImage = decodeGif(fileData);
   } else {
-    throw new Error("File type not supported.");
+    throw new Error(
+      "Image file type not recognised. Only PNG, JPG and GIF formats are supported.",
+    );
   }
   decodedImage.fileType = fileType;
 
@@ -121,7 +183,8 @@ export function setAttributes(decodedImage: any) {
     frameIndex: number = 0,
   ) {
     const frameData = this.getFrameData(frameIndex);
-    const index = x + (y * this.width);
+    let index = x + (y * this.width);
+
     let pixelData;
 
     //with transparency values
@@ -139,17 +202,21 @@ export function setAttributes(decodedImage: any) {
         r: frameData[index * 3],
         g: frameData[index * 3 + 1],
         b: frameData[index * 3 + 2],
-        a: 255
+        a: 255,
       };
+
       //grayscale
     } else {
       pixelData = {
         r: frameData[index],
         g: frameData[index],
         b: frameData[index],
-        a: 255
+        a: 255,
       };
     }
+
+    // if(isNaN(frameData[index*this.valuesPerPixel])) console.log(index*4, frameData.length, pixelData)
+
     return pixelData;
   };
 
