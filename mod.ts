@@ -368,7 +368,7 @@ async function printImage(settings: imageSettings): Promise<void> {
 
         if (frameIndex === numFrames - 1) {
           // tty.goDownSync(height + 2);
-          tty.showCursorSync();
+          await tty.showCursor();
           resolve();
         } else {
           tty.goUpSync(height);
